@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The World Movie Selection (TWMS)</title>
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1a1a1a; --ink-soft:#6b6b6b; --ink-faint:#9b9b9b;
+    --line:#e4e4e4; --line-soft:#efefef;
+    --active:#111111; --chip:#f4f4f4; --chip-on:#111111;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{display:grid;grid-template-columns:340px 1fr;min-height:100vh;}
+
+  /* ===== 左侧筛选器 ===== */
+  .panel{padding:42px 32px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;}
+  .brand{font-size:23px;font-weight:800;line-height:1.25;letter-spacing:-.01em;margin-bottom:28px;}
+  .brand small{display:block;font-size:23px;}
+
+  .search{position:relative;margin-bottom:30px;}
+  .search input{
+    width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);
+    border-radius:24px;font-size:13px;color:var(--ink);outline:none;background:#fafafa;
+  }
+  .search input:focus{border-color:#bbb;background:#fff;}
+  .search input::placeholder{color:var(--ink-faint);}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--ink-faint);}
+
+  .group{margin-bottom:26px;}
+  .group-row{display:flex;align-items:flex-start;gap:16px;}
+  .group-label{font-size:14px;color:var(--ink-faint);width:42px;flex-shrink:0;padding-top:7px;}
+  .group-body{flex:1;}
+
+  /* 年份 */
+  .year-row{display:flex;align-items:center;gap:10px;}
+  .year-sel{
+    appearance:none;background:var(--active);color:#fff;border:none;border-radius:7px;
+    padding:7px 30px 7px 14px;font-size:13px;font-weight:600;cursor:pointer;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;
+  }
+  .year-sel.empty{background:var(--chip);color:var(--ink-faint);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239b9b9b' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");}
+  .year-dash{color:var(--ink-faint);}
+
+  /* 获奖/提名开关 */
+  .toggle{display:inline-flex;background:var(--chip);border-radius:20px;padding:3px;margin-bottom:14px;}
+  .toggle button{
+    border:none;background:none;padding:6px 16px;border-radius:18px;font-size:13px;
+    color:var(--ink-soft);cursor:pointer;font-weight:500;transition:all .15s;
+  }
+  .toggle button.on{background:var(--chip-on);color:#fff;font-weight:600;}
+
+  /* 标签 chips */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 13px;
+    font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;white-space:nowrap;
+  }
+  .chip:hover{border-color:#bbb;}
+  .chip.on{background:var(--chip-on);color:#fff;border-color:var(--chip-on);}
+  .chip.soon{color:var(--ink-faint);cursor:default;}
+  .chip.soon:hover{border-color:var(--line);}
+
+  /* ===== 右侧结果 ===== */
+  .main{padding:42px 44px;}
+  .main-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:30px;gap:20px;}
+  .main-title{font-size:21px;font-weight:700;}
+  .main-title .sub{display:block;font-size:13px;color:var(--ink-faint);font-weight:400;margin-top:5px;}
+  .export{
+    border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px;
+    font-size:13px;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  }
+  .export:hover{border-color:#bbb;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:28px 24px;}
+  .card{cursor:pointer;}
+  .poster{
+    aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#f0f0f0;
+    box-shadow:var(--shadow);position:relative;display:flex;align-items:center;justify-content:center;
+    transition:transform .18s;
+  }
+  .card:hover .poster{transform:translateY(-4px);}
+  .poster img{width:100%;height:100%;object-fit:cover;}
+  .poster .ph{color:var(--ink-faint);font-size:12px;text-align:center;padding:12px;line-height:1.5;}
+  .badge{
+    position:absolute;top:9px;left:9px;font-size:11px;font-weight:700;padding:3px 9px;
+    border-radius:20px;background:rgba(17,17,17,.85);color:#fff;backdrop-filter:blur(4px);
+  }
+  .badge.win{background:#c8962f;}
+  .lang-flag{position:absolute;top:9px;right:9px;font-size:10.5px;background:rgba(255,255,255,.92);
+    color:#333;padding:3px 7px;border-radius:20px;}
+  .card-title{font-size:15px;font-weight:600;margin-top:12px;line-height:1.35;}
+  .card-meta{font-size:12.5px;color:var(--ink-faint);margin-top:4px;}
+
+  .empty{color:var(--ink-faint);font-size:14px;padding:60px 0;text-align:center;grid-column:1/-1;}
+
+  @media(max-width:820px){
+    .app{grid-template-columns:1fr;}
+    .panel{position:relative;height:auto;border-right:none;border-bottom:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- 左侧筛选 -->
+  <aside class="panel">
+    <div class="brand">The World Movie<br>Selection<small>（TWMS）</small></div>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="q" type="text" placeholder="例: 奥斯卡和电影手册过去5年重合的电影是什么">
+    </div>
+
+    <div class="group">
+      <div class="group-row">
+        <span class="group-label">年份</span>
+        <div class="group-body">
+          <div class="year-row">
+            <select class="year-sel" id="yearFrom"></select>
+            <span class="year-dash">—</span>
+            <select class="year-sel empty" id="yearTo"><option value="">option</option></select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-row">
+        <span class="group-label">奖项</span>
+        <div class="group-body">
+          <div class="toggle" id="winToggle">
+            <button data-mode="获奖" class="on">看获奖</button>
+            <button data-mode="提名">看提名</button>
+          </div>
+          <div class="chips" id="awardChips">
+            <div class="chip on" data-award="oscar_best_picture">奥斯卡金像</div>
+            <div class="chip soon" data-award="cannes">戛纳金棕榈</div>
+            <div class="chip soon" data-award="berlin">柏林金熊</div>
+            <div class="chip soon" data-award="venice">威尼斯金狮</div>
+            <div class="chip soon" data-award="bluedragon">韩国青龙奖</div>
+            <div class="chip soon" data-award="goldenhorse">台北金马</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-row">
+        <span class="group-label">榜单</span>
+        <div class="group-body">
+          <div class="chips">
+            <div class="chip soon">电影手册</div>
+            <div class="chip soon">电影旬报</div>
+            <div class="chip soon">视与听</div>
+            <div class="chip soon">CC</div>
+            <div class="chip soon">Janus Films</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-row">
+        <span class="group-label">影评人</span>
+        <div class="group-body">
+          <div class="chips">
+            <div class="chip soon">反派影评</div>
+            <div class="chip soon">深焦</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- 右侧结果 -->
+  <main class="main">
+    <div class="main-head">
+      <div class="main-title" id="resultTitle">—</div>
+      <button class="export">导出为 ▾</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+</div>
+
+<script src="twms-data.js"></script>
+<script>
+const state = { yearFrom:null, yearTo:null, mode:'获奖', award:'oscar_best_picture' };
+
+// 年份选项
+const years = [...new Set(TWMS_DATA.map(d=>d.year))].sort();
+const yearFromSel = document.getElementById('yearFrom');
+const yearToSel = document.getElementById('yearTo');
+years.forEach(y=>{
+  yearFromSel.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+  yearToSel.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+});
+yearFromSel.value = years[0];
+state.yearFrom = years[0];
+
+yearFromSel.onchange = e=>{ state.yearFrom=e.target.value; render(); };
+yearToSel.onchange = e=>{
+  state.yearTo = e.target.value || null;
+  yearToSel.classList.toggle('empty', !e.target.value);
+  render();
+};
+
+// 获奖/提名开关
+document.querySelectorAll('#winToggle button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('#winToggle button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    state.mode = b.dataset.mode;
+    render();
+  };
+});
+
+// 奖项标签(目前只有奥斯卡可点)
+document.querySelectorAll('#awardChips .chip:not(.soon)').forEach(c=>{
+  c.onclick = ()=>{
+    document.querySelectorAll('#awardChips .chip').forEach(x=>x.classList.remove('on'));
+    c.classList.add('on');
+    state.award = c.dataset.award;
+    render();
+  };
+});
+
+const AWARD_NAMES = { oscar_best_picture:'奥斯卡金像奖' };
+
+function render(){
+  const yFrom = state.yearFrom;
+  const yTo = state.yearTo || state.yearFrom; // 没选终点就当单年
+  const lo = Math.min(+yFrom, +yTo), hi = Math.max(+yFrom, +yTo);
+
+  const list = TWMS_DATA.filter(d=>
+    d.award_key === state.award &&
+    d.type === state.mode &&
+    +d.year >= lo && +d.year <= hi
+  );
+
+  // 标题
+  const yearText = lo===hi ? `${lo}年` : `${lo}–${hi}`;
+  document.getElementById('resultTitle').innerHTML =
+    `${yearText} ${AWARD_NAMES[state.award]||''}${state.mode}电影` +
+    `<span class="sub">${list.length} 部</span>`;
+
+  // 卡片
+  const grid = document.getElementById('grid');
+  if(!list.length){ grid.innerHTML = '<div class="empty">这个范围内没有记录。</div>'; return; }
+  grid.innerHTML = list.map(d=>`
+    <div class="card">
+      <div class="poster">
+        ${d.poster ? `<img src="${d.poster}" alt="">` : `<div class="ph">${d.title_cn}<br><span style="font-size:11px">（海报待补）</span></div>`}
+        <span class="badge ${d.type==='获奖'?'win':''}">${d.type}</span>
+        ${d.lang ? `<span class="lang-flag">${d.lang}</span>` : ''}
+      </div>
+      <div class="card-title">${d.title_cn}（${d.year}）</div>
+      <div class="card-meta">${d.directors && d.directors.length ? d.directors.join('、') : '导演待补'} · ${d.title_en}</div>
+    </div>
+  `).join('');
+}
+
+render();
+</script>
+</body>
+</html>
