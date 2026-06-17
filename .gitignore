@@ -4,3 +4,6 @@ posters/
 __pycache__/
 .env
 secrets.*
+*.bak
+*.bak2
+*.bak*
