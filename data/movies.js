@@ -19,7 +19,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/45269.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/45269.jpg",
     "tmdb_rating": 7.733,
     "tmdb_title_cn": "国王的演讲",
     "douban_id": null,
@@ -49,7 +49,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/44264.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/44264.jpg",
     "tmdb_rating": 7.306,
     "tmdb_title_cn": "大地惊雷",
     "douban_id": null,
@@ -77,7 +77,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/37799.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/37799.jpg",
     "tmdb_rating": 7.375,
     "tmdb_title_cn": "社交网络",
     "douban_id": null,
@@ -105,7 +105,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/45317.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/45317.jpg",
     "tmdb_rating": 7.378,
     "tmdb_title_cn": "斗士",
     "douban_id": null,
@@ -134,7 +134,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/27205.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/27205.jpg",
     "tmdb_rating": 8.372,
     "tmdb_title_cn": "盗梦空间",
     "douban_id": null,
@@ -163,7 +163,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/39013.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/39013.jpg",
     "tmdb_rating": 6.779,
     "tmdb_title_cn": "冬天的骨头",
     "douban_id": null,
@@ -191,7 +191,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/44214.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/44214.jpg",
     "tmdb_rating": 7.686,
     "tmdb_title_cn": "黑天鹅",
     "douban_id": null,
@@ -220,7 +220,7 @@ const TWMS_DATA = [
       "United States of America",
       "France"
     ],
-    "poster": "posters/39781.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/39781.jpg",
     "tmdb_rating": 6.6,
     "tmdb_title_cn": "孩子们都很好",
     "douban_id": null,
@@ -251,7 +251,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/44115.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/44115.jpg",
     "tmdb_rating": 7.089,
     "tmdb_title_cn": "127小时",
     "douban_id": null,
@@ -281,7 +281,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/10193.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/10193.jpg",
     "tmdb_rating": 7.807,
     "tmdb_title_cn": "玩具总动员3",
     "douban_id": null,
@@ -310,7 +310,7 @@ const TWMS_DATA = [
       "Belgium",
       "France"
     ],
-    "poster": "posters/74643.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/74643.jpg",
     "tmdb_rating": 7.441,
     "tmdb_title_cn": "艺术家",
     "douban_id": null,
@@ -339,7 +339,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/65057.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/65057.jpg",
     "tmdb_rating": 6.836,
     "tmdb_title_cn": "后裔",
     "douban_id": null,
@@ -367,7 +367,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/64685.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/64685.jpg",
     "tmdb_rating": 6.984,
     "tmdb_title_cn": "特别响，非常近",
     "douban_id": null,
@@ -395,7 +395,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/50014.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/50014.jpg",
     "tmdb_rating": 8.203,
     "tmdb_title_cn": "相助",
     "douban_id": null,
@@ -423,7 +423,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/44826.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/44826.jpg",
     "tmdb_rating": 7.174,
     "tmdb_title_cn": "雨果",
     "douban_id": null,
@@ -453,7 +453,7 @@ const TWMS_DATA = [
       "Spain",
       "United States of America"
     ],
-    "poster": "posters/59436.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/59436.jpg",
     "tmdb_rating": 7.512,
     "tmdb_title_cn": "午夜巴黎",
     "douban_id": null,
@@ -483,7 +483,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/60308.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/60308.jpg",
     "tmdb_rating": 7.295,
     "tmdb_title_cn": "点球成金",
     "douban_id": null,
@@ -511,7 +511,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/8967.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/8967.jpg",
     "tmdb_rating": 6.724,
     "tmdb_title_cn": "生命之树",
     "douban_id": null,
@@ -540,7 +540,7 @@ const TWMS_DATA = [
       "United States of America",
       "India"
     ],
-    "poster": "posters/57212.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/57212.jpg",
     "tmdb_rating": 7.305,
     "tmdb_title_cn": "战马",
     "douban_id": null,
@@ -569,7 +569,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/68734.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/68734.jpg",
     "tmdb_rating": 7.287,
     "tmdb_title_cn": "逃离德黑兰",
     "douban_id": null,
@@ -599,7 +599,7 @@ const TWMS_DATA = [
       "Germany",
       "Austria"
     ],
-    "poster": "posters/86837.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/86837.jpg",
     "tmdb_rating": 7.755,
     "tmdb_title_cn": "爱",
     "douban_id": null,
@@ -630,7 +630,7 @@ const TWMS_DATA = [
       "Canada",
       "United States of America"
     ],
-    "poster": "posters/84175.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/84175.jpg",
     "tmdb_rating": 6.843,
     "tmdb_title_cn": "南国野兽",
     "douban_id": null,
@@ -659,7 +659,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/82693.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/82693.jpg",
     "tmdb_rating": 7.153,
     "tmdb_title_cn": "乌云背后的幸福线",
     "douban_id": null,
@@ -687,7 +687,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/87827.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/87827.jpg",
     "tmdb_rating": 7.41,
     "tmdb_title_cn": "少年派的奇幻漂流",
     "douban_id": null,
@@ -715,7 +715,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/97630.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/97630.jpg",
     "tmdb_rating": 6.992,
     "tmdb_title_cn": "猎杀本·拉登",
     "douban_id": null,
@@ -743,7 +743,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/68718.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/68718.jpg",
     "tmdb_rating": 8.192,
     "tmdb_title_cn": "被解救的姜戈",
     "douban_id": null,
@@ -772,7 +772,7 @@ const TWMS_DATA = [
       "United States of America",
       "India"
     ],
-    "poster": "posters/72976.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/72976.jpg",
     "tmdb_rating": 6.848,
     "tmdb_title_cn": "林肯",
     "douban_id": null,
@@ -802,7 +802,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/82695.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/82695.jpg",
     "tmdb_rating": 7.306,
     "tmdb_title_cn": "悲惨世界",
     "douban_id": null,
@@ -832,7 +832,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/76203.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/76203.jpg",
     "tmdb_rating": 7.931,
     "tmdb_title_cn": "为奴十二年",
     "douban_id": null,
@@ -862,7 +862,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/49047.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/49047.jpg",
     "tmdb_rating": 7.169,
     "tmdb_title_cn": "地心引力",
     "douban_id": null,
@@ -891,7 +891,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/152532.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/152532.jpg",
     "tmdb_rating": 7.913,
     "tmdb_title_cn": "达拉斯买家俱乐部",
     "douban_id": null,
@@ -919,7 +919,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/168672.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/168672.jpg",
     "tmdb_rating": 6.856,
     "tmdb_title_cn": "美国骗局",
     "douban_id": null,
@@ -947,7 +947,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/106646.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/106646.jpg",
     "tmdb_rating": 8.027,
     "tmdb_title_cn": "华尔街之狼",
     "douban_id": null,
@@ -975,7 +975,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/109424.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/109424.jpg",
     "tmdb_rating": 7.539,
     "tmdb_title_cn": "菲利普船长",
     "douban_id": null,
@@ -1003,7 +1003,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/152601.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/152601.jpg",
     "tmdb_rating": 7.839,
     "tmdb_title_cn": "她",
     "douban_id": null,
@@ -1031,7 +1031,7 @@ const TWMS_DATA = [
     "countries": [
       "United Kingdom"
     ],
-    "poster": "posters/205220.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/205220.jpg",
     "tmdb_rating": 7.346,
     "tmdb_title_cn": "菲洛梅娜",
     "douban_id": null,
@@ -1059,7 +1059,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/129670.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/129670.jpg",
     "tmdb_rating": 7.451,
     "tmdb_title_cn": "内布拉斯加",
     "douban_id": null,
@@ -1087,7 +1087,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/194662.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/194662.jpg",
     "tmdb_rating": 7.441,
     "tmdb_title_cn": "鸟人",
     "douban_id": null,
@@ -1115,7 +1115,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/85350.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/85350.jpg",
     "tmdb_rating": 7.494,
     "tmdb_title_cn": "少年时代",
     "douban_id": null,
@@ -1144,7 +1144,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/273895.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/273895.jpg",
     "tmdb_rating": 7.373,
     "tmdb_title_cn": "塞尔玛",
     "douban_id": null,
@@ -1174,7 +1174,7 @@ const TWMS_DATA = [
       "United States of America",
       "United Kingdom"
     ],
-    "poster": "posters/205596.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/205596.jpg",
     "tmdb_rating": 8.0,
     "tmdb_title_cn": "模仿游戏",
     "douban_id": null,
@@ -1204,7 +1204,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/266856.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/266856.jpg",
     "tmdb_rating": 7.831,
     "tmdb_title_cn": "万物理论",
     "douban_id": null,
@@ -1233,7 +1233,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/244786.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/244786.jpg",
     "tmdb_rating": 8.375,
     "tmdb_title_cn": "爆裂鼓手",
     "douban_id": null,
@@ -1261,7 +1261,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/190859.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/190859.jpg",
     "tmdb_rating": 7.412,
     "tmdb_title_cn": "美国狙击手",
     "douban_id": null,
@@ -1290,7 +1290,7 @@ const TWMS_DATA = [
       "United States of America",
       "Germany"
     ],
-    "poster": "posters/120467.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/120467.jpg",
     "tmdb_rating": 8.028,
     "tmdb_title_cn": "布达佩斯大饭店",
     "douban_id": null,
@@ -1319,7 +1319,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/314365.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/314365.jpg",
     "tmdb_rating": 7.813,
     "tmdb_title_cn": "聚焦",
     "douban_id": null,
@@ -1350,7 +1350,7 @@ const TWMS_DATA = [
       "Taiwan",
       "United States of America"
     ],
-    "poster": "posters/281957.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/281957.jpg",
     "tmdb_rating": 7.541,
     "tmdb_title_cn": "荒野猎人",
     "douban_id": null,
@@ -1381,7 +1381,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/318846.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/318846.jpg",
     "tmdb_rating": 7.367,
     "tmdb_title_cn": "大空头",
     "douban_id": null,
@@ -1411,7 +1411,7 @@ const TWMS_DATA = [
       "Germany",
       "India"
     ],
-    "poster": "posters/296098.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/296098.jpg",
     "tmdb_rating": 7.24,
     "tmdb_title_cn": "间谍之桥",
     "douban_id": null,
@@ -1443,7 +1443,7 @@ const TWMS_DATA = [
       "Ireland",
       "United Kingdom"
     ],
-    "poster": "posters/167073.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/167073.jpg",
     "tmdb_rating": 7.299,
     "tmdb_title_cn": "布鲁克林",
     "douban_id": null,
@@ -1474,7 +1474,7 @@ const TWMS_DATA = [
       "Australia",
       "United States of America"
     ],
-    "poster": "posters/76341.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/76341.jpg",
     "tmdb_rating": 7.634,
     "tmdb_title_cn": "疯狂的麦克斯4：狂暴之路",
     "douban_id": null,
@@ -1503,7 +1503,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/286217.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/286217.jpg",
     "tmdb_rating": 7.7,
     "tmdb_title_cn": "火星救援",
     "douban_id": null,
@@ -1534,7 +1534,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/264644.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/264644.jpg",
     "tmdb_rating": 7.994,
     "tmdb_title_cn": "房间",
     "douban_id": null,
@@ -1565,7 +1565,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/376867.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/376867.jpg",
     "tmdb_rating": 7.4,
     "tmdb_title_cn": "月光男孩",
     "douban_id": null,
@@ -1593,7 +1593,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/313369.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/313369.jpg",
     "tmdb_rating": 7.9,
     "tmdb_title_cn": "爱乐之城",
     "douban_id": null,
@@ -1621,7 +1621,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/329865.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/329865.jpg",
     "tmdb_rating": 7.627,
     "tmdb_title_cn": "降临",
     "douban_id": null,
@@ -1650,7 +1650,7 @@ const TWMS_DATA = [
       "Canada",
       "United States of America"
     ],
-    "poster": "posters/393457.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/393457.jpg",
     "tmdb_rating": 6.891,
     "tmdb_title_cn": "藩篱",
     "douban_id": null,
@@ -1681,7 +1681,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/324786.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/324786.jpg",
     "tmdb_rating": 8.2,
     "tmdb_title_cn": "血战钢锯岭",
     "douban_id": null,
@@ -1711,7 +1711,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/338766.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/338766.jpg",
     "tmdb_rating": 7.301,
     "tmdb_title_cn": "赴汤蹈火",
     "douban_id": null,
@@ -1739,7 +1739,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/381284.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/381284.jpg",
     "tmdb_rating": 8.044,
     "tmdb_title_cn": "隐藏人物",
     "douban_id": null,
@@ -1768,7 +1768,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/8587.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/8587.jpg",
     "tmdb_rating": 8.253,
     "tmdb_title_cn": "狮子王",
     "douban_id": null,
@@ -1796,7 +1796,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/334541.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/334541.jpg",
     "tmdb_rating": 7.555,
     "tmdb_title_cn": "海边的曼彻斯特",
     "douban_id": null,
@@ -1824,7 +1824,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/399055.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/399055.jpg",
     "tmdb_rating": 7.236,
     "tmdb_title_cn": "水形物语",
     "douban_id": null,
@@ -1855,7 +1855,7 @@ const TWMS_DATA = [
       "Italy",
       "United States of America"
     ],
-    "poster": "posters/398818.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/398818.jpg",
     "tmdb_rating": 8.09,
     "tmdb_title_cn": "请以你的名字呼唤我",
     "douban_id": null,
@@ -1887,7 +1887,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/399404.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/399404.jpg",
     "tmdb_rating": 7.357,
     "tmdb_title_cn": "至暗时刻",
     "douban_id": null,
@@ -1917,7 +1917,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/374720.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/374720.jpg",
     "tmdb_rating": 7.453,
     "tmdb_title_cn": "敦刻尔克",
     "douban_id": null,
@@ -1946,7 +1946,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/419430.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/419430.jpg",
     "tmdb_rating": 7.624,
     "tmdb_title_cn": "逃出绝命镇",
     "douban_id": null,
@@ -1974,7 +1974,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/391713.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/391713.jpg",
     "tmdb_rating": 7.252,
     "tmdb_title_cn": "伯德小姐",
     "douban_id": null,
@@ -2003,7 +2003,7 @@ const TWMS_DATA = [
       "United States of America",
       "China"
     ],
-    "poster": "posters/400617.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/400617.jpg",
     "tmdb_rating": 7.3,
     "tmdb_title_cn": "魅影缝匠",
     "douban_id": null,
@@ -2033,7 +2033,7 @@ const TWMS_DATA = [
       "United States of America",
       "India"
     ],
-    "poster": "posters/446354.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/446354.jpg",
     "tmdb_rating": 7.005,
     "tmdb_title_cn": "华盛顿邮报",
     "douban_id": null,
@@ -2063,7 +2063,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/359940.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/359940.jpg",
     "tmdb_rating": 8.054,
     "tmdb_title_cn": "三块广告牌",
     "douban_id": null,
@@ -2092,7 +2092,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/490132.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/490132.jpg",
     "tmdb_rating": 8.225,
     "tmdb_title_cn": "绿皮书",
     "douban_id": null,
@@ -2120,7 +2120,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/284054.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/284054.jpg",
     "tmdb_rating": 7.364,
     "tmdb_title_cn": "黑豹",
     "douban_id": null,
@@ -2148,7 +2148,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/487558.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/487558.jpg",
     "tmdb_rating": 7.49,
     "tmdb_title_cn": "黑色党徒",
     "douban_id": null,
@@ -2176,7 +2176,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/424694.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/424694.jpg",
     "tmdb_rating": 7.958,
     "tmdb_title_cn": "波西米亚狂想曲",
     "douban_id": null,
@@ -2206,7 +2206,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/375262.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/375262.jpg",
     "tmdb_rating": 7.489,
     "tmdb_title_cn": "宠儿",
     "douban_id": null,
@@ -2237,7 +2237,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/426426.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/426426.jpg",
     "tmdb_rating": 7.619,
     "tmdb_title_cn": "罗马",
     "douban_id": null,
@@ -2266,7 +2266,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/332562.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/332562.jpg",
     "tmdb_rating": 7.492,
     "tmdb_title_cn": "一个明星的诞生",
     "douban_id": null,
@@ -2294,7 +2294,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/429197.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/429197.jpg",
     "tmdb_rating": 7.016,
     "tmdb_title_cn": "副总统",
     "douban_id": null,
@@ -2325,7 +2325,7 @@ const TWMS_DATA = [
     "country_codes": [
       "KR"
     ],
-    "poster": "posters/496243.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/496243.jpg",
     "poster_tmdb": "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
     "tmdb_rating": 8.5,
     "tmdb_title_cn": "寄生虫",
@@ -2350,7 +2350,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/359724.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/359724.jpg",
     "tmdb_rating": 8.006,
     "tmdb_title_cn": "极速车王",
     "douban_id": null,
@@ -2378,7 +2378,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/398978.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/398978.jpg",
     "tmdb_rating": 7.576,
     "tmdb_title_cn": "爱尔兰人",
     "douban_id": null,
@@ -2407,7 +2407,7 @@ const TWMS_DATA = [
       "New Zealand",
       "United States of America"
     ],
-    "poster": "posters/515001.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/515001.jpg",
     "tmdb_rating": 7.984,
     "tmdb_title_cn": "乔乔的异想世界",
     "douban_id": null,
@@ -2437,7 +2437,7 @@ const TWMS_DATA = [
       "Canada",
       "United States of America"
     ],
-    "poster": "posters/475557.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/475557.jpg",
     "tmdb_rating": 8.124,
     "tmdb_title_cn": "小丑",
     "douban_id": null,
@@ -2466,7 +2466,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/331482.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/331482.jpg",
     "tmdb_rating": 7.853,
     "tmdb_title_cn": "小妇人",
     "douban_id": null,
@@ -2494,7 +2494,7 @@ const TWMS_DATA = [
     "countries": [
       "United Kingdom"
     ],
-    "poster": "posters/492188.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/492188.jpg",
     "tmdb_rating": 7.732,
     "tmdb_title_cn": "婚姻故事",
     "douban_id": null,
@@ -2524,7 +2524,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/466272.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/466272.jpg",
     "tmdb_rating": 7.421,
     "tmdb_title_cn": "好莱坞往事",
     "douban_id": null,
@@ -2557,7 +2557,7 @@ const TWMS_DATA = [
       "Spain",
       "India"
     ],
-    "poster": "posters/530915.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/530915.jpg",
     "tmdb_rating": 7.987,
     "tmdb_title_cn": "1917",
     "douban_id": null,
@@ -2588,7 +2588,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/581734.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/581734.jpg",
     "tmdb_rating": 7.17,
     "tmdb_title_cn": "无依之地",
     "douban_id": null,
@@ -2617,7 +2617,7 @@ const TWMS_DATA = [
       "France",
       "United Kingdom"
     ],
-    "poster": "posters/600354.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/600354.jpg",
     "tmdb_rating": 8.094,
     "tmdb_title_cn": "困在时间里的父亲",
     "douban_id": null,
@@ -2647,7 +2647,7 @@ const TWMS_DATA = [
       "Canada",
       "United States of America"
     ],
-    "poster": "posters/583406.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/583406.jpg",
     "tmdb_rating": 7.294,
     "tmdb_title_cn": "犹大与黑弥赛亚",
     "douban_id": null,
@@ -2676,7 +2676,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/614560.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/614560.jpg",
     "tmdb_rating": 6.669,
     "tmdb_title_cn": "曼克",
     "douban_id": null,
@@ -2704,7 +2704,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/615643.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/615643.jpg",
     "tmdb_rating": 7.328,
     "tmdb_title_cn": "米纳里",
     "douban_id": null,
@@ -2732,7 +2732,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/582014.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/582014.jpg",
     "tmdb_rating": 7.384,
     "tmdb_title_cn": "前程似锦的女孩",
     "douban_id": null,
@@ -2760,7 +2760,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/502033.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/502033.jpg",
     "tmdb_rating": 7.701,
     "tmdb_title_cn": "金属之声",
     "douban_id": null,
@@ -2788,7 +2788,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/556984.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/556984.jpg",
     "tmdb_rating": 7.657,
     "tmdb_title_cn": "芝加哥七君子审判",
     "douban_id": null,
@@ -2817,7 +2817,7 @@ const TWMS_DATA = [
       "France",
       "United States of America"
     ],
-    "poster": "posters/776503.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/776503.jpg",
     "tmdb_rating": 7.887,
     "tmdb_title_cn": "健听女孩",
     "douban_id": null,
@@ -2847,7 +2847,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "Northern Ireland"
     ],
-    "poster": "posters/777270.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/777270.jpg",
     "tmdb_rating": 7.038,
     "tmdb_title_cn": "贝尔法斯特",
     "douban_id": null,
@@ -2876,7 +2876,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/646380.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/646380.jpg",
     "tmdb_rating": 7.064,
     "tmdb_title_cn": "Don't Look Up",
     "douban_id": null,
@@ -2904,7 +2904,7 @@ const TWMS_DATA = [
     "countries": [
       "Japan"
     ],
-    "poster": "posters/758866.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/758866.jpg",
     "tmdb_rating": 7.4,
     "tmdb_title_cn": "驾驶我的车",
     "douban_id": null,
@@ -2932,7 +2932,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/438631.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/438631.jpg",
     "tmdb_rating": 7.78,
     "tmdb_title_cn": "沙丘",
     "douban_id": null,
@@ -2960,7 +2960,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/614917.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/614917.jpg",
     "tmdb_rating": 7.597,
     "tmdb_title_cn": "国王理查德",
     "douban_id": null,
@@ -2989,7 +2989,7 @@ const TWMS_DATA = [
       "Canada",
       "United States of America"
     ],
-    "poster": "posters/718032.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/718032.jpg",
     "tmdb_rating": 6.953,
     "tmdb_title_cn": "甘草披萨",
     "douban_id": null,
@@ -3018,7 +3018,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/597208.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/597208.jpg",
     "tmdb_rating": 6.952,
     "tmdb_title_cn": "玉面情魔",
     "douban_id": null,
@@ -3049,7 +3049,7 @@ const TWMS_DATA = [
       "New Zealand",
       "United Kingdom"
     ],
-    "poster": "posters/600583.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/600583.jpg",
     "tmdb_rating": 6.739,
     "tmdb_title_cn": "犬之力",
     "douban_id": null,
@@ -3080,7 +3080,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/511809.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/511809.jpg",
     "tmdb_rating": 6.917,
     "tmdb_title_cn": "西区故事",
     "douban_id": null,
@@ -3109,7 +3109,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/545611.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/545611.jpg",
     "tmdb_rating": 7.718,
     "tmdb_title_cn": "瞬息全宇宙",
     "douban_id": null,
@@ -3137,7 +3137,7 @@ const TWMS_DATA = [
     "countries": [
       "Germany"
     ],
-    "poster": "posters/49046.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/49046.jpg",
     "tmdb_rating": 7.727,
     "tmdb_title_cn": "西线无战事",
     "douban_id": null,
@@ -3165,7 +3165,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/76600.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/76600.jpg",
     "tmdb_rating": 7.595,
     "tmdb_title_cn": "阿凡达：水之道",
     "douban_id": null,
@@ -3194,7 +3194,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/674324.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/674324.jpg",
     "tmdb_rating": 7.463,
     "tmdb_title_cn": "伊尼舍林的报丧女妖",
     "douban_id": null,
@@ -3224,7 +3224,7 @@ const TWMS_DATA = [
       "Australia",
       "United States of America"
     ],
-    "poster": "posters/614934.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/614934.jpg",
     "tmdb_rating": 7.457,
     "tmdb_title_cn": "猫王",
     "douban_id": null,
@@ -3254,7 +3254,7 @@ const TWMS_DATA = [
       "United States of America",
       "India"
     ],
-    "poster": "posters/804095.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/804095.jpg",
     "tmdb_rating": 7.565,
     "tmdb_title_cn": "造梦之家",
     "douban_id": null,
@@ -3283,7 +3283,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/817758.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/817758.jpg",
     "tmdb_rating": 7.1,
     "tmdb_title_cn": "塔尔",
     "douban_id": null,
@@ -3311,7 +3311,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/361743.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/361743.jpg",
     "tmdb_rating": 8.159,
     "tmdb_title_cn": "Top Gun: Maverick",
     "douban_id": null,
@@ -3348,7 +3348,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/497828.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/497828.jpg",
     "tmdb_rating": 7.015,
     "tmdb_title_cn": "悲情三角",
     "douban_id": null,
@@ -3385,7 +3385,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/777245.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/777245.jpg",
     "tmdb_rating": 6.824,
     "tmdb_title_cn": "女人们的谈话",
     "douban_id": null,
@@ -3414,7 +3414,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/872585.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/872585.jpg",
     "tmdb_rating": 8.026,
     "tmdb_title_cn": "奥本海默",
     "douban_id": null,
@@ -3443,7 +3443,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1056360.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1056360.jpg",
     "tmdb_rating": 7.25,
     "tmdb_title_cn": "美国小说",
     "douban_id": null,
@@ -3471,7 +3471,7 @@ const TWMS_DATA = [
     "countries": [
       "France"
     ],
-    "poster": "posters/915935.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/915935.jpg",
     "tmdb_rating": 7.516,
     "tmdb_title_cn": "坠落的审判",
     "douban_id": null,
@@ -3500,7 +3500,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/346698.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/346698.jpg",
     "tmdb_rating": 6.92,
     "tmdb_title_cn": "芭比",
     "douban_id": null,
@@ -3529,7 +3529,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/840430.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/840430.jpg",
     "tmdb_rating": 7.645,
     "tmdb_title_cn": "留校联盟",
     "douban_id": null,
@@ -3557,7 +3557,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/466420.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/466420.jpg",
     "tmdb_rating": 7.398,
     "tmdb_title_cn": "花月杀手",
     "douban_id": null,
@@ -3585,7 +3585,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/523607.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/523607.jpg",
     "tmdb_rating": 6.262,
     "tmdb_title_cn": "音乐大师",
     "douban_id": null,
@@ -3614,7 +3614,7 @@ const TWMS_DATA = [
       "United States of America",
       "South Korea"
     ],
-    "poster": "posters/666277.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/666277.jpg",
     "tmdb_rating": 7.7,
     "tmdb_title_cn": "过往人生",
     "douban_id": null,
@@ -3645,7 +3645,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/792307.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/792307.jpg",
     "tmdb_rating": 7.639,
     "tmdb_title_cn": "可怜的东西",
     "douban_id": null,
@@ -3677,7 +3677,7 @@ const TWMS_DATA = [
       "Poland",
       "United Kingdom"
     ],
-    "poster": "posters/467244.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/467244.jpg",
     "tmdb_rating": 7.011,
     "tmdb_title_cn": "利益区域",
     "douban_id": null,
@@ -3707,7 +3707,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1064213.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1064213.jpg",
     "tmdb_rating": 7.07,
     "tmdb_title_cn": "阿诺拉",
     "douban_id": null,
@@ -3736,7 +3736,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/549509.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/549509.jpg",
     "tmdb_rating": 6.954,
     "tmdb_title_cn": "粗野派",
     "douban_id": null,
@@ -3765,7 +3765,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/661539.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/661539.jpg",
     "tmdb_rating": 7.069,
     "tmdb_title_cn": "摇滚诗人：未知的传奇",
     "douban_id": null,
@@ -3794,7 +3794,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/974576.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/974576.jpg",
     "tmdb_rating": 7.195,
     "tmdb_title_cn": "秘密会议",
     "douban_id": null,
@@ -3823,7 +3823,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/693134.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/693134.jpg",
     "tmdb_rating": 8.126,
     "tmdb_title_cn": "沙丘2",
     "douban_id": null,
@@ -3854,7 +3854,7 @@ const TWMS_DATA = [
       "United States of America",
       "Mexico"
     ],
-    "poster": "posters/974950.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/974950.jpg",
     "tmdb_rating": 6.46,
     "tmdb_title_cn": "艾米莉亚·佩雷斯",
     "douban_id": null,
@@ -3886,7 +3886,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1330018.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1330018.jpg",
     "tmdb_rating": 0.0,
     "tmdb_title_cn": "I'm Still Here",
     "douban_id": null,
@@ -3914,7 +3914,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1028196.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1028196.jpg",
     "tmdb_rating": 6.655,
     "tmdb_title_cn": "尼克男孩",
     "douban_id": null,
@@ -3944,7 +3944,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/933260.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/933260.jpg",
     "tmdb_rating": 7.134,
     "tmdb_title_cn": "某种物质",
     "douban_id": null,
@@ -3974,7 +3974,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/402431.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/402431.jpg",
     "tmdb_rating": 6.907,
     "tmdb_title_cn": "魔法坏女巫",
     "douban_id": null,
@@ -4002,7 +4002,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1054867.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1054867.jpg",
     "tmdb_rating": 7.353,
     "tmdb_title_cn": "一战再战",
     "douban_id": null,
@@ -4033,7 +4033,7 @@ const TWMS_DATA = [
       "United States of America",
       "Canada"
     ],
-    "poster": "posters/701387.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/701387.jpg",
     "tmdb_rating": 7.321,
     "tmdb_title_cn": "拯救地球",
     "douban_id": null,
@@ -4064,7 +4064,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/911430.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/911430.jpg",
     "tmdb_rating": 7.8,
     "tmdb_title_cn": "F1：狂飙飞车",
     "douban_id": null,
@@ -4093,7 +4093,7 @@ const TWMS_DATA = [
       "United States of America",
       "Canada"
     ],
-    "poster": "posters/1062722.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1062722.jpg",
     "tmdb_rating": 7.636,
     "tmdb_title_cn": "Frankenstein",
     "douban_id": null,
@@ -4123,7 +4123,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/858024.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/858024.jpg",
     "tmdb_rating": 7.744,
     "tmdb_title_cn": "哈姆奈特",
     "douban_id": null,
@@ -4152,7 +4152,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1317288.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1317288.jpg",
     "tmdb_rating": 7.387,
     "tmdb_title_cn": "至尊马蒂",
     "douban_id": null,
@@ -4181,7 +4181,7 @@ const TWMS_DATA = [
       "United Kingdom",
       "United States of America"
     ],
-    "poster": "posters/207703.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/207703.jpg",
     "tmdb_rating": 7.62,
     "tmdb_title_cn": "王牌特工：特工学院",
     "douban_id": null,
@@ -4216,7 +4216,7 @@ const TWMS_DATA = [
       "Germany",
       "United Kingdom"
     ],
-    "poster": "posters/1124566.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1124566.jpg",
     "tmdb_rating": 7.457,
     "tmdb_title_cn": "情感价值",
     "douban_id": null,
@@ -4250,7 +4250,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1233413.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1233413.jpg",
     "tmdb_rating": 7.499,
     "tmdb_title_cn": "罪人",
     "douban_id": null,
@@ -4278,7 +4278,7 @@ const TWMS_DATA = [
     "countries": [
       "United States of America"
     ],
-    "poster": "posters/1241983.jpg",
+    "poster": "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters/1241983.jpg",
     "tmdb_rating": 7.318,
     "tmdb_title_cn": "火车梦",
     "douban_id": null,
