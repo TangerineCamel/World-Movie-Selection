@@ -38,6 +38,18 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 12px center;}
   .year-dash{color:var(--ink-faint);}
+  .sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;}
+  .sort-label{font-size:13px;color:var(--ink-faint);margin-right:4px;}
+  .sort-btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 12px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;transition:all .15s;}
+  .sort-btn:hover{border-color:#bbb;}
+  .sort-btn.on{background:var(--chip-on);color:#fff;border-color:var(--chip-on);}
+  .range-wrap{position:relative;height:32px;width:100%;max-width:240px;}
+  .range-track{position:absolute;top:50%;transform:translateY(-50%);width:100%;height:3px;background:var(--line);border-radius:3px;}
+  .range-fill{position:absolute;top:50%;transform:translateY(-50%);height:3px;background:var(--active);border-radius:3px;}
+  .range-input{position:absolute;top:0;left:0;width:100%;height:32px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none;}
+  .range-input::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--active);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .range-input::-moz-range-thumb{pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--active);cursor:pointer;}
+  .range-label{font-size:13px;color:var(--ink);font-weight:600;margin-top:8px;}
   .toggle{display:inline-flex;background:var(--chip);border-radius:20px;padding:3px;margin-bottom:14px;}
   .toggle button{border:none;background:none;padding:6px 16px;border-radius:18px;font-size:13px;color:var(--ink-soft);cursor:pointer;font-weight:500;transition:all .15s;}
   .toggle button.on{background:var(--chip-on);color:#fff;font-weight:600;}
@@ -86,11 +98,14 @@
     </div>
     <div class="group"><div class="group-row">
       <span class="group-label">年份</span>
-      <div class="group-body"><div class="year-row">
-        <select class="year-sel" id="yearFrom"></select>
-        <span class="year-dash">—</span>
-        <select class="year-sel" id="yearTo"></select>
-      </div></div>
+      <div class="group-body">
+        <div class="range-wrap">
+          <div class="range-track" id="rangeTrack"></div>
+          <input type="range" id="yearMin" class="range-input">
+          <input type="range" id="yearMax" class="range-input">
+        </div>
+        <div class="range-label"><span id="yearMinLabel"></span> — <span id="yearMaxLabel"></span></div>
+      </div>
     </div></div>
     <div class="group"><div class="group-row">
       <span class="group-label">奖项</span>
@@ -135,26 +150,59 @@
       <div class="main-title" id="resultTitle">—</div>
       <button class="export">导出为 ▾</button>
     </div>
+    <div class="sort-bar">
+      <span class="sort-label">排序</span>
+      <button class="sort-btn on" data-sort="year-desc">最新优先</button>
+      <button class="sort-btn" data-sort="year-asc">最早优先</button>
+    </div>
     <div class="grid" id="grid"></div>
   </main>
 </div>
 
 <script src="data/movies.js"></script>
 <script>
-const state = { yearFrom:null, yearTo:null, mode:'获奖', award:'oscar_best_picture' };
-const years = [...new Set(TWMS_DATA.map(d=>d.year))].sort();
-const yearFromSel = document.getElementById('yearFrom');
-const yearToSel = document.getElementById('yearTo');
-years.forEach(y=>{
-  yearFromSel.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-  yearToSel.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-});
-yearFromSel.value = years[0];
-yearToSel.value = years[years.length-1];
-state.yearFrom = years[0];
-state.yearTo = years[years.length-1];
-yearFromSel.onchange = e=>{ state.yearFrom=e.target.value; render(); };
-yearToSel.onchange = e=>{ state.yearTo=e.target.value; render(); };
+const state = { yearFrom:null, yearTo:null, mode:'获奖', award:'oscar_best_picture', sort:'year-desc' };
+const years = [...new Set(TWMS_DATA.map(d=>d.year))].map(Number).sort((a,b)=>a-b);
+const minYear = years[0], maxYear = years[years.length-1];
+const yearMin = document.getElementById('yearMin');
+const yearMax = document.getElementById('yearMax');
+const track = document.getElementById('rangeTrack');
+
+[yearMin, yearMax].forEach(s=>{ s.min=minYear; s.max=maxYear; s.step=1; });
+// 默认最近5年
+const defaultFrom = Math.max(minYear, maxYear-4);
+yearMin.value = defaultFrom;
+yearMax.value = maxYear;
+state.yearFrom = defaultFrom;
+state.yearTo = maxYear;
+
+// 填充进度条 + 标签
+function updateRangeUI(){
+  let lo = Math.min(+yearMin.value, +yearMax.value);
+  let hi = Math.max(+yearMin.value, +yearMax.value);
+  document.getElementById('yearMinLabel').textContent = lo;
+  document.getElementById('yearMaxLabel').textContent = hi;
+  const pctLo = (lo-minYear)/(maxYear-minYear)*100;
+  const pctHi = (hi-minYear)/(maxYear-minYear)*100;
+  let fill = track.querySelector('.range-fill');
+  if(!fill){ fill=document.createElement('div'); fill.className='range-fill'; track.appendChild(fill); }
+  fill.style.left = pctLo+'%';
+  fill.style.width = (pctHi-pctLo)+'%';
+}
+
+// 拖动时只更新 UI（标签和进度条），不刷新结果
+yearMin.addEventListener('input', updateRangeUI);
+yearMax.addEventListener('input', updateRangeUI);
+// 松手才更新结果
+function commitYear(){
+  state.yearFrom = Math.min(+yearMin.value, +yearMax.value);
+  state.yearTo = Math.max(+yearMin.value, +yearMax.value);
+  render();
+}
+yearMin.addEventListener('change', commitYear);
+yearMax.addEventListener('change', commitYear);
+
+updateRangeUI();
 document.querySelectorAll('#winToggle button').forEach(b=>{
   b.onclick = ()=>{
     document.querySelectorAll('#winToggle button').forEach(x=>x.classList.remove('on'));
@@ -177,19 +225,19 @@ function render(){
     // 看获奖：只显示获奖；看提名：显示全部(提名+获奖)
     if(state.mode === '获奖') return d.type === '获奖';
     return true; // 提名模式：获奖和提名都显示
-  }).sort((a,b)=>(+b.year)-(+a.year));
+  }).sort((a,b)=> state.sort==='year-asc' ? (+a.year)-(+b.year) : (+b.year)-(+a.year));
   const yearText = lo===hi ? `${lo}年` : `${lo}–${hi}`;
   document.getElementById('resultTitle').innerHTML =
     `${yearText} ${AWARD_NAMES[state.award]||''}${state.mode}电影<span class="sub">${list.length} 部</span>`;
   const grid = document.getElementById('grid');
   if(!list.length){ grid.innerHTML = '<div class="empty">这个范围内没有记录。</div>'; return; }
   grid.innerHTML = list.map(d=>{
-    const title = d.tmdb_title_cn || d.title_cn;
+    const title = d.title_cn || d.tmdb_title_cn;
     const directors = (d.directors && d.directors.length) ? d.directors.join('、') : '导演待补';
     return `<div class="card">
       <div class="poster">
         ${d.poster ? `<img src="${d.poster}" alt="${title}" loading="lazy">` : `<div class="ph">${title}<br><span style="font-size:11px">（暂无海报）</span></div>`}
-        <span class="badge ${d.type==='获奖'?'win':''}">${d.type}</span>
+        ${state.mode==='提名' ? `<span class="badge ${d.type==='获奖'?'win':''}">${d.type}</span>` : ''}
         ${d.lang ? `<span class="lang-flag">${d.lang}</span>` : ''}
       </div>
       <div class="card-title">${title}（${d.year}）</div>
@@ -209,6 +257,14 @@ function render(){
   });
   window.addEventListener('mouseup', ()=>{ dragging=false; resizer.classList.remove('active'); });
 })();
+document.querySelectorAll('.sort-btn').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('.sort-btn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    state.sort = b.dataset.sort;
+    render();
+  };
+});
 render();
 </script>
 </body>
