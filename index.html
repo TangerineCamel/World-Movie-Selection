@@ -120,7 +120,7 @@
           <div class="chip soon" data-award="berlin">柏林金熊</div>
           <div class="chip soon" data-award="venice">威尼斯金狮</div>
           <div class="chip soon" data-award="bluedragon">韩国青龙奖</div>
-          <div class="chip soon" data-award="goldenhorse">台北金马</div>
+          <div class="chip" data-award="golden_horse_best_feature">台北金马</div>
         </div>
       </div>
     </div></div>
@@ -215,7 +215,7 @@ document.querySelectorAll('#awardChips .chip:not(.soon)').forEach(c=>{
     c.classList.add('on'); state.award = c.dataset.award; render();
   };
 });
-const AWARD_NAMES = { oscar_best_picture:'奥斯卡金像奖' };
+const AWARD_NAMES = { oscar_best_picture:'奥斯卡', golden_horse_best_feature:'金马' };
 function render(){
   const lo = Math.min(+state.yearFrom, +state.yearTo);
   const hi = Math.max(+state.yearFrom, +state.yearTo);
