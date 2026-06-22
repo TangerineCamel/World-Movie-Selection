@@ -43,7 +43,9 @@
   .sort-btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 12px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;transition:all .15s;}
   .sort-btn:hover{border-color:#bbb;}
   .sort-btn.on{background:var(--chip-on);color:#fff;border-color:var(--chip-on);}
-  .range-wrap{position:relative;height:32px;width:100%;max-width:240px;}
+  .range-wrap{position:relative;height:32px;width:100%;max-width:240px;cursor:pointer;}
+  .range-bubble{position:absolute;bottom:100%;transform:translateX(-50%);background:var(--active);color:#fff;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s;margin-bottom:2px;z-index:5;}
+  .range-bubble.show{opacity:1;}
   .range-track{position:absolute;top:50%;transform:translateY(-50%);width:100%;height:3px;background:var(--line);border-radius:3px;}
   .range-fill{position:absolute;top:50%;transform:translateY(-50%);height:3px;background:var(--active);border-radius:3px;}
   .range-input{position:absolute;top:0;left:0;width:100%;height:32px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none;}
@@ -73,7 +75,8 @@
   .poster .ph{color:var(--ink-faint);font-size:12px;text-align:center;padding:12px;line-height:1.5;}
   .badge{position:absolute;top:9px;left:9px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(17,17,17,.85);color:#fff;backdrop-filter:blur(4px);}
   .badge.win{background:#0bc200;}
-  .lang-flag{position:absolute;top:9px;right:9px;font-size:10.5px;background:rgba(255,255,255,.92);color:#333;padding:3px 7px;border-radius:20px;}
+  .award-tags{position:absolute;top:9px;right:9px;display:flex;flex-direction:column;gap:4px;align-items:flex-end;z-index:2;}
+  .award-tag{font-size:10.5px;font-weight:700;background:linear-gradient(135deg,#f9e8c2 0%,#f3d896 50%,#e8c46a 100%);color:#7a5a1e;padding:3px 9px;border-radius:20px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.4);}
   .card-title{font-size:15px;font-weight:600;margin-top:12px;line-height:1.35;}
   .card-meta{font-size:12.5px;color:var(--ink-faint);margin-top:4px;}
   .empty{color:var(--ink-faint);font-size:14px;padding:60px 0;text-align:center;grid-column:1/-1;}
@@ -116,7 +119,7 @@
         </div>
         <div class="chips" id="awardChips">
           <div class="chip on" data-award="oscar_best_picture">奥斯卡金像</div>
-          <div class="chip soon" data-award="cannes">戛纳金棕榈</div>
+          <div class="chip" data-award="cannes_palme_dor">戛纳金棕榈</div>
           <div class="chip soon" data-award="berlin">柏林金熊</div>
           <div class="chip soon" data-award="venice">威尼斯金狮</div>
           <div class="chip soon" data-award="bluedragon">韩国青龙奖</div>
@@ -161,7 +164,7 @@
 
 <script src="data/movies.js"></script>
 <script>
-const state = { yearFrom:null, yearTo:null, mode:'获奖', award:'oscar_best_picture', sort:'year-desc' };
+const state = { yearFrom:null, yearTo:null, mode:'获奖', awards:['oscar_best_picture'], sort:'year-desc' };
 const years = [...new Set(TWMS_DATA.map(d=>d.year))].map(Number).sort((a,b)=>a-b);
 const minYear = years[0], maxYear = years[years.length-1];
 const yearMin = document.getElementById('yearMin');
@@ -203,6 +206,42 @@ yearMin.addEventListener('change', commitYear);
 yearMax.addEventListener('change', commitYear);
 
 updateRangeUI();
+// === 年份条：hover显示年份 + 点击就近跳转 ===
+(function(){
+  const wrap = document.querySelector('.range-wrap');
+  const bubble = document.createElement('div');
+  bubble.className = 'range-bubble';
+  wrap.appendChild(bubble);
+
+  function yearAtX(clientX){
+    const rect = wrap.getBoundingClientRect();
+    let pct = (clientX - rect.left) / rect.width;
+    pct = Math.max(0, Math.min(1, pct));
+    return Math.round(minYear + pct * (maxYear - minYear));
+  }
+
+  wrap.addEventListener('mousemove', e=>{
+    const yr = yearAtX(e.clientX);
+    const rect = wrap.getBoundingClientRect();
+    bubble.textContent = yr;
+    bubble.style.left = (e.clientX - rect.left) + 'px';
+    bubble.classList.add('show');
+  });
+  wrap.addEventListener('mouseleave', ()=>{ bubble.classList.remove('show'); });
+
+  wrap.addEventListener('click', e=>{
+    const yr = yearAtX(e.clientX);
+    const distMin = Math.abs(yr - +yearMin.value);
+    const distMax = Math.abs(yr - +yearMax.value);
+    if(distMin <= distMax){
+      yearMin.value = yr;
+    } else {
+      yearMax.value = yr;
+    }
+    updateRangeUI();
+    commitYear();
+  });
+})();
 document.querySelectorAll('#winToggle button').forEach(b=>{
   b.onclick = ()=>{
     document.querySelectorAll('#winToggle button').forEach(x=>x.classList.remove('on'));
@@ -211,34 +250,59 @@ document.querySelectorAll('#winToggle button').forEach(b=>{
 });
 document.querySelectorAll('#awardChips .chip:not(.soon)').forEach(c=>{
   c.onclick = ()=>{
-    document.querySelectorAll('#awardChips .chip').forEach(x=>x.classList.remove('on'));
-    c.classList.add('on'); state.award = c.dataset.award; render();
+    const key = c.dataset.award;
+    if(state.awards.includes(key)){
+      if(state.awards.length > 1){
+        state.awards = state.awards.filter(a=>a!==key);
+        c.classList.remove('on');
+      }
+    } else {
+      state.awards.push(key);
+      c.classList.add('on');
+    }
+    render();
   };
 });
-const AWARD_NAMES = { oscar_best_picture:'奥斯卡', golden_horse_best_feature:'金马' };
+const AWARD_NAMES = { oscar_best_picture:'奥斯卡', golden_horse_best_feature:'金马', cannes_palme_dor:'戛纳' };
+const AWARD_TAGS = { oscar_best_picture:'奥斯卡金像', golden_horse_best_feature:'金马最佳', cannes_palme_dor:'戛纳金棕榈' };
 function render(){
   const lo = Math.min(+state.yearFrom, +state.yearTo);
   const hi = Math.max(+state.yearFrom, +state.yearTo);
-  const list = TWMS_DATA.filter(d=>{
-    if(d.award_key !== state.award) return false;
+  let list = TWMS_DATA.filter(d=>{
+    if(!state.awards.includes(d.award_key)) return false;
     if(+d.year < lo || +d.year > hi) return false;
-    // 看获奖：只显示获奖；看提名：显示全部(提名+获奖)
     if(state.mode === '获奖') return d.type === '获奖';
-    return true; // 提名模式：获奖和提名都显示
-  }).sort((a,b)=> state.sort==='year-asc' ? (+a.year)-(+b.year) : (+b.year)-(+a.year));
+    return true;
+  });
+  const seen = new Set();
+  list = list.filter(d=>{
+    if(d.tmdb_id && seen.has(d.tmdb_id)) return false;
+    if(d.tmdb_id) seen.add(d.tmdb_id);
+    return true;
+  });
+  list.sort((a,b)=> state.sort==='year-asc' ? (+a.year)-(+b.year) : (+b.year)-(+a.year));
   const yearText = lo===hi ? `${lo}年` : `${lo}–${hi}`;
+  const awardText = state.awards.map(a=>AWARD_NAMES[a]||'').join(' + ');
   document.getElementById('resultTitle').innerHTML =
-    `${yearText} ${AWARD_NAMES[state.award]||''}${state.mode}电影<span class="sub">${list.length} 部</span>`;
+    `${yearText} ${awardText} 最佳影片<span class="sub">${list.length} 部</span>`;
   const grid = document.getElementById('grid');
   if(!list.length){ grid.innerHTML = '<div class="empty">这个范围内没有记录。</div>'; return; }
   grid.innerHTML = list.map(d=>{
     const title = d.title_cn || d.tmdb_title_cn;
     const directors = (d.directors && d.directors.length) ? d.directors.join('、') : '导演待补';
+    let awardTags = '';
+    if(state.awards.length > 1){
+      const awardsOfFilm = [...new Set(
+        TWMS_DATA.filter(x=>x.tmdb_id===d.tmdb_id && state.awards.includes(x.award_key))
+                 .map(x=>x.award_key)
+      )];
+      awardTags = awardsOfFilm.map(a=>`<span class="award-tag">${AWARD_TAGS[a]||''}</span>`).join('');
+    }
     return `<div class="card">
       <div class="poster">
         ${d.poster ? `<img src="${d.poster}" alt="${title}" loading="lazy">` : `<div class="ph">${title}<br><span style="font-size:11px">（暂无海报）</span></div>`}
         ${state.mode==='提名' ? `<span class="badge ${d.type==='获奖'?'win':''}">${d.type}</span>` : ''}
-        ${d.lang ? `<span class="lang-flag">${d.lang}</span>` : ''}
+        ${awardTags ? `<div class="award-tags">${awardTags}</div>` : ''}
       </div>
       <div class="card-title">${title}（${d.year}）</div>
       <div class="card-meta">${directors}</div>
