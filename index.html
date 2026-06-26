@@ -340,6 +340,7 @@ function listArr(){
   return CC_DATA.map(function(d){
     var y=d.is_boxset?null:((''+d.year).match(/\d{4}/)?+(''+d.year).match(/\d{4}/)[0]:null);
     return {title:d.title_cn,year:y,poster:d.poster,dir:d.director||'',
+      rank:d.rank,
       awardKeys:CN2AWARDS[d.title_cn]||[]};
   });
 }
@@ -391,13 +392,15 @@ function render(){
   document.querySelector('.sort-row').style.visibility='';
 
   var isA24=(state.mode==='list' && state.list==='a24');
+  var isCC=(state.mode==='list' && state.list==='cc');
+  var isRanked=isA24||isCC;
   var arr;
   if(state.mode==='award')arr=awardArr();
   else if(state.mode==='list')arr=(state.list==='a24'?a24Arr():listArr());
   else arr=favArr();
 
-  // A24 默认按票房排名(rank)；其余按年份
-  if(isA24){
+  // 带排名榜单(A24/CC)按排名排序；其余按年份
+  if(isRanked){
     arr.sort(function(a,b){return state.sort==='new'?a.rank-b.rank:b.rank-a.rank;});
     document.getElementById('sNew').textContent='从高到低';
     document.getElementById('sOld').textContent='从低到高';
@@ -444,10 +447,11 @@ function render(){
     var heart='<div class="heart '+(faved?'faved':'')+'" data-title="'+encodeURIComponent(f.title)+'">'+(faved?HEART_FAV:HEART_UNFAV)+'</div>';
     var tags=(showTags&&f.awardKeys&&f.awardKeys.length)?
       '<div class="card-tags">'+f.awardKeys.map(function(k){return '<span class="mini-tag '+k+'">'+AWNAME[k]+'</span>';}).join('')+'</div>':'';
-    // A24：排名角标 + 票房
-    var rankBadge=isA24?'<div class="rank-badge'+(f.rank<=3?' is-new':'')+'">'+f.rank+'</div>':'';
-    var a24Head=isA24?'<div class="a24-head">'+rankBadge+'<span class="a24-box">'+f.box+'</span></div>':'';
-    return '<div class="card">'+a24Head+'<div class="poster">'+p+heart+'</div>'+
+    // 排名标(A24/CC共用，前三橙色)；A24额外带票房
+    var rankBadge=isRanked?'<div class="rank-badge'+((isA24&&f.rank<=3)?' is-new':'')+'">'+f.rank+'</div>':'';
+    var headBox=isA24?'<span class="a24-box">'+f.box+'</span>':'';
+    var rankHead=isRanked?'<div class="a24-head">'+rankBadge+headBox+'</div>':'';
+    return '<div class="card">'+rankHead+'<div class="poster">'+p+heart+'</div>'+
       '<div class="card-title">'+f.title+(f.year?'<span class="yr">'+f.year+'</span>':'')+'</div>'+
       '<div class="card-dir">'+f.dir+'</div>'+tags+'</div>';
   }).join('');

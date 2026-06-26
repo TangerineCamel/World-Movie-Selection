@@ -1,8 +1,9 @@
 // CC 标准收藏·畅销榜 维度数据 (50: 44单片+6套装)
-// v6: 新增 director 字段
+// v7: 新增 rank 字段(来自 criterion.com best-sellers 页面真实排名)
 const CC_DATA = [
  {
   "id": "1243",
+  "rank": 1,
   "spine": 1243,
   "title_cn": "老无所依",
   "director": "科恩兄弟",
@@ -13,6 +14,7 @@ const CC_DATA = [
  },
  {
   "id": "1254",
+  "rank": 2,
   "spine": 1254,
   "title_cn": "哥斯拉VS碧奥兰蒂",
   "director": "大森一树",
@@ -23,6 +25,7 @@ const CC_DATA = [
  },
  {
   "id": "12",
+  "rank": 3,
   "spine": 12,
   "title_cn": "摇滚万万岁",
   "director": "罗伯·莱纳",
@@ -33,6 +36,7 @@ const CC_DATA = [
  },
  {
   "id": "691",
+  "rank": 4,
   "spine": 691,
   "title_cn": "大盗独行",
   "director": "迈克尔·曼",
@@ -43,6 +47,7 @@ const CC_DATA = [
  },
  {
   "id": "1259",
+  "rank": 5,
   "spine": 1259,
   "title_cn": "阿诺拉",
   "director": "肖恩·贝克",
@@ -53,6 +58,7 @@ const CC_DATA = [
  },
  {
   "id": "1283",
+  "rank": 6,
   "spine": 1283,
   "title_cn": "暴力史",
   "director": "大卫·柯南伯格",
@@ -63,6 +69,7 @@ const CC_DATA = [
  },
  {
   "id": "1278",
+  "rank": 8,
   "spine": 1278,
   "title_cn": "Flow",
   "director": "金茨·兹巴洛迪斯",
@@ -73,6 +80,7 @@ const CC_DATA = [
  },
  {
   "id": "1267",
+  "rank": 9,
   "spine": 1267,
   "title_cn": "千惊万险",
   "director": "威廉·弗里德金",
@@ -83,6 +91,7 @@ const CC_DATA = [
  },
  {
   "id": "501",
+  "rank": 10,
   "spine": 501,
   "title_cn": "德州巴黎",
   "director": "维姆·文德斯",
@@ -93,6 +102,7 @@ const CC_DATA = [
  },
  {
   "id": "977",
+  "rank": 11,
   "spine": 977,
   "title_cn": "蓝丝绒",
   "director": "大卫·林奇",
@@ -103,6 +113,7 @@ const CC_DATA = [
  },
  {
   "id": "2",
+  "rank": 12,
   "spine": 2,
   "title_cn": "七武士",
   "director": "黑泽明",
@@ -113,6 +124,7 @@ const CC_DATA = [
  },
  {
   "id": "779",
+  "rank": 13,
   "spine": 779,
   "title_cn": "穆赫兰道",
   "director": "大卫·林奇",
@@ -123,6 +135,7 @@ const CC_DATA = [
  },
  {
   "id": "1284",
+  "rank": 14,
   "spine": 1284,
   "title_cn": "灵魂大搜索",
   "director": "肯·罗素",
@@ -133,6 +146,7 @@ const CC_DATA = [
  },
  {
   "id": "843",
+  "rank": 15,
   "spine": 843,
   "title_cn": "私恋失调",
   "director": "保罗·托马斯·安德森",
@@ -143,6 +157,7 @@ const CC_DATA = [
  },
  {
   "id": "897",
+  "rank": 16,
   "spine": 897,
   "title_cn": "巴里·林登",
   "director": "斯坦利·库布里克",
@@ -153,6 +168,7 @@ const CC_DATA = [
  },
  {
   "id": "898",
+  "rank": 17,
   "spine": 898,
   "title_cn": "双峰：与火同行",
   "director": "大卫·林奇",
@@ -163,6 +179,7 @@ const CC_DATA = [
  },
  {
   "id": "36",
+  "rank": 19,
   "spine": 36,
   "title_cn": "恐惧的代价",
   "director": "亨利-乔治·克鲁佐",
@@ -173,6 +190,7 @@ const CC_DATA = [
  },
  {
   "id": "24",
+  "rank": 20,
   "spine": 24,
   "title_cn": "天国与地狱",
   "director": "黑泽明",
@@ -183,6 +201,7 @@ const CC_DATA = [
  },
  {
   "id": "1152",
+  "rank": 22,
   "spine": 1152,
   "title_cn": "妖夜慌踪",
   "director": "大卫·林奇",
@@ -193,6 +212,7 @@ const CC_DATA = [
  },
  {
   "id": "100",
+  "rank": 24,
   "spine": 100,
   "title_cn": "野兽男孩演出录像精选",
   "director": "多位",
@@ -203,6 +223,7 @@ const CC_DATA = [
  },
  {
   "id": "948",
+  "rank": 25,
   "spine": 948,
   "title_cn": "公主新娘",
   "director": "罗伯·莱纳",
@@ -213,6 +234,7 @@ const CC_DATA = [
  },
  {
   "id": "1248",
+  "rank": 26,
   "spine": 1248,
   "title_cn": "百战宝枪",
   "director": "安东尼·曼",
@@ -223,6 +245,7 @@ const CC_DATA = [
  },
  {
   "id": "1161",
+  "rank": 27,
   "spine": 1161,
   "title_cn": "机器人总动员",
   "director": "安德鲁·斯坦顿",
@@ -233,6 +256,7 @@ const CC_DATA = [
  },
  {
   "id": "13",
+  "rank": 28,
   "spine": 13,
   "title_cn": "沉默的羔羊",
   "director": "乔纳森·戴米",
@@ -243,6 +267,7 @@ const CC_DATA = [
  },
  {
   "id": "1025",
+  "rank": 29,
   "spine": 1025,
   "title_cn": "布达佩斯大饭店",
   "director": "韦斯·安德森",
@@ -253,6 +278,7 @@ const CC_DATA = [
  },
  {
   "id": "1054",
+  "rank": 30,
   "spine": 1054,
   "title_cn": "寄生虫",
   "director": "奉俊昊",
@@ -263,6 +289,7 @@ const CC_DATA = [
  },
  {
   "id": "539",
+  "rank": 31,
   "spine": 539,
   "title_cn": "鬼怪屋",
   "director": "大林宣彦",
@@ -273,6 +300,7 @@ const CC_DATA = [
  },
  {
   "id": "1104",
+  "rank": 32,
   "spine": 1104,
   "title_cn": "公民凯恩",
   "director": "奥逊·威尔斯",
@@ -283,6 +311,7 @@ const CC_DATA = [
  },
  {
   "id": "1059",
+  "rank": 33,
   "spine": 1059,
   "title_cn": "欲望号快车",
   "director": "大卫·柯南伯格",
@@ -293,6 +322,7 @@ const CC_DATA = [
  },
  {
   "id": "1035",
+  "rank": 34,
   "spine": 1035,
   "title_cn": "自己去看",
   "director": "埃列姆·克利莫夫",
@@ -303,6 +333,7 @@ const CC_DATA = [
  },
  {
   "id": "562",
+  "rank": 35,
   "spine": 562,
   "title_cn": "凶线",
   "director": "布莱恩·德·帕尔玛",
@@ -313,6 +344,7 @@ const CC_DATA = [
  },
  {
   "id": "137",
+  "rank": 36,
   "spine": 137,
   "title_cn": "美人计",
   "director": "阿尔弗雷德·希区柯克",
@@ -323,6 +355,7 @@ const CC_DATA = [
  },
  {
   "id": "942",
+  "rank": 37,
   "spine": 942,
   "title_cn": "生命之树",
   "director": "泰伦斯·马力克",
@@ -333,6 +366,7 @@ const CC_DATA = [
  },
  {
   "id": "1134",
+  "rank": 38,
   "spine": 1134,
   "title_cn": "愤怒的公牛",
   "director": "马丁·斯科塞斯",
@@ -343,6 +377,7 @@ const CC_DATA = [
  },
  {
   "id": "1101",
+  "rank": 39,
   "spine": 1101,
   "title_cn": "原钻",
   "director": "萨夫迪兄弟",
@@ -353,6 +388,7 @@ const CC_DATA = [
  },
  {
   "id": "336",
+  "rank": 40,
   "spine": 336,
   "title_cn": "年少轻狂",
   "director": "理查德·林克莱特",
@@ -363,6 +399,7 @@ const CC_DATA = [
  },
  {
   "id": "44",
+  "rank": 41,
   "spine": 44,
   "title_cn": "红菱艳",
   "director": "鲍威尔与普雷斯伯格",
@@ -373,6 +410,7 @@ const CC_DATA = [
  },
  {
   "id": "837",
+  "rank": 43,
   "spine": 837,
   "title_cn": "十诫",
   "director": "克日什托夫·基耶斯洛夫斯基",
@@ -383,6 +421,7 @@ const CC_DATA = [
  },
  {
   "id": "849",
+  "rank": 44,
   "spine": 849,
   "title_cn": "女友礼拜五",
   "director": "霍华德·霍克斯",
@@ -393,6 +432,7 @@ const CC_DATA = [
  },
  {
   "id": "1160",
+  "rank": 45,
   "spine": 1160,
   "title_cn": "黑潮",
   "director": "斯派克·李",
@@ -403,6 +443,7 @@ const CC_DATA = [
  },
  {
   "id": "905",
+  "rank": 46,
   "spine": 905,
   "title_cn": "早餐俱乐部",
   "director": "约翰·休斯",
@@ -413,6 +454,7 @@ const CC_DATA = [
  },
  {
   "id": "1175",
+  "rank": 47,
   "spine": 1175,
   "title_cn": "内陆帝国",
   "director": "大卫·林奇",
@@ -423,6 +465,7 @@ const CC_DATA = [
  },
  {
   "id": "1073",
+  "rank": 48,
   "spine": 1073,
   "title_cn": "杀人回忆",
   "director": "奉俊昊",
@@ -433,6 +476,7 @@ const CC_DATA = [
  },
  {
   "id": "1185",
+  "rank": 50,
   "spine": 1185,
   "title_cn": "下班后",
   "director": "马丁·斯科塞斯",
@@ -443,6 +487,7 @@ const CC_DATA = [
  },
  {
   "id": "box01",
+  "rank": 18,
   "spine": 0,
   "title_cn": "椿三十郎：武士两部曲",
   "director": "黑泽明",
@@ -453,6 +498,7 @@ const CC_DATA = [
  },
  {
   "id": "box02",
+  "rank": 7,
   "spine": 0,
   "title_cn": "韦斯安德森收藏",
   "director": "韦斯·安德森",
@@ -463,6 +509,7 @@ const CC_DATA = [
  },
  {
   "id": "box03",
+  "rank": 49,
   "spine": 0,
   "title_cn": "李小龙：他的巅峰之作",
   "director": "多位",
@@ -473,6 +520,7 @@ const CC_DATA = [
  },
  {
   "id": "box04",
+  "rank": 23,
   "spine": 0,
   "title_cn": "爱在三部曲",
   "director": "理查德·林克莱特",
@@ -483,6 +531,7 @@ const CC_DATA = [
  },
  {
   "id": "box05",
+  "rank": 21,
   "spine": 0,
   "title_cn": "王家卫的世界",
   "director": "王家卫",
@@ -493,6 +542,7 @@ const CC_DATA = [
  },
  {
   "id": "box06",
+  "rank": 42,
   "spine": 0,
   "title_cn": "约翰·卡萨维蒂：五部曲",
   "director": "约翰·卡萨维蒂",
