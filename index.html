@@ -2,334 +2,591 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WMS · 世界电影大赏</title>
 <style>
-  :root{
-    --bg:#ffffff; --ink:#1a1a1a; --ink-soft:#6b6b6b; --ink-faint:#9b9b9b;
-    --line:#e4e4e4; --line-soft:#efefef;
-    --active:#111111; --chip:#f4f4f4; --chip-on:#111111;
-    --shadow:0 1px 3px rgba(0,0,0,.06),0 6px 20px rgba(0,0,0,.04);
-    --panel-w:340px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--ink);
-    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
-  .app{display:flex;min-height:100vh;}
-  .panel{width:var(--panel-w);flex-shrink:0;padding:42px 32px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;}
-  .resizer{width:6px;flex-shrink:0;cursor:col-resize;background:transparent;position:relative;}
-  .resizer:hover,.resizer.active{background:var(--line-soft);}
-  .resizer::after{content:"";position:absolute;left:2px;top:0;width:1px;height:100%;background:var(--line);}
-  .brand{margin-bottom:28px;}
-  .brand img{max-width:160px;height:auto;display:block;}
-  .brand-text{font-size:23px;font-weight:800;line-height:1.2;letter-spacing:-.01em;}
-  .brand-text small{display:block;font-size:14px;color:var(--ink-soft);font-weight:600;margin-top:2px;}
-  .search{position:relative;margin-bottom:30px;}
-  .search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);border-radius:24px;font-size:13px;color:var(--ink);outline:none;background:#fafafa;}
-  .search input:focus{border-color:#bbb;background:#fff;}
-  .search input::placeholder{color:var(--ink-faint);}
-  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--ink-faint);}
-  .group{margin-bottom:26px;}
-  .group-row{display:flex;align-items:flex-start;gap:16px;}
-  .group-label{font-size:14px;color:var(--ink-faint);width:42px;flex-shrink:0;padding-top:7px;}
-  .group-body{flex:1;min-width:0;}
-  .year-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .year-sel{appearance:none;background:var(--active);color:#fff;border:none;border-radius:7px;padding:7px 30px 7px 14px;font-size:13px;font-weight:600;cursor:pointer;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 12px center;}
-  .year-dash{color:var(--ink-faint);}
-  .sort-bar{display:flex;align-items:center;gap:8px;margin-bottom:22px;}
-  .sort-label{font-size:13px;color:var(--ink-faint);margin-right:4px;}
-  .sort-btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 12px;font-size:12.5px;color:var(--ink-soft);cursor:pointer;transition:all .15s;}
-  .sort-btn:hover{border-color:#bbb;}
-  .sort-btn.on{background:var(--chip-on);color:#fff;border-color:var(--chip-on);}
-  .range-wrap{position:relative;height:32px;width:100%;max-width:240px;cursor:pointer;}
-  .range-bubble{position:absolute;bottom:100%;transform:translateX(-50%);background:var(--active);color:#fff;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .12s;margin-bottom:2px;z-index:5;}
-  .range-bubble.show{opacity:1;}
-  .range-track{position:absolute;top:50%;transform:translateY(-50%);width:100%;height:3px;background:var(--line);border-radius:3px;}
-  .range-fill{position:absolute;top:50%;transform:translateY(-50%);height:3px;background:var(--active);border-radius:3px;}
-  .range-input{position:absolute;top:0;left:0;width:100%;height:32px;margin:0;background:none;pointer-events:none;-webkit-appearance:none;appearance:none;}
-  .range-input::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--active);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-  .range-input::-moz-range-thumb{pointer-events:auto;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid var(--active);cursor:pointer;}
-  .range-label{font-size:13px;color:var(--ink);font-weight:600;margin-top:8px;}
-  .toggle{display:inline-flex;background:var(--chip);border-radius:20px;padding:3px;margin-bottom:14px;}
-  .toggle button{border:none;background:none;padding:6px 16px;border-radius:18px;font-size:13px;color:var(--ink-soft);cursor:pointer;font-weight:500;transition:all .15s;}
-  .toggle button.on{background:var(--chip-on);color:#fff;font-weight:600;}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;}
-  .chip{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 13px;font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;white-space:nowrap;}
-  .chip:hover{border-color:#bbb;}
-  .chip.on{background:var(--chip-on);color:#fff;border-color:var(--chip-on);}
-  .chip.soon{color:var(--ink-faint);cursor:default;}
-  .chip.soon:hover{border-color:var(--line);}
-  .main{flex:1;min-width:0;padding:42px 44px;}
-  .main-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:30px;gap:20px;}
-  .main-title{font-size:21px;font-weight:700;}
-  .main-title .sub{display:block;font-size:13px;color:var(--ink-faint);font-weight:400;margin-top:5px;}
-  .export{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 14px;font-size:13px;color:var(--ink-soft);cursor:pointer;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-  .export:hover{border-color:#bbb;}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:28px 24px;}
-  .card{cursor:pointer;}
-  .poster{aspect-ratio:2/3;border-radius:10px;overflow:hidden;background:#f0f0f0;box-shadow:var(--shadow);position:relative;display:flex;align-items:center;justify-content:center;transition:transform .18s;}
-  .card:hover .poster{transform:translateY(-4px);}
-  .poster img{width:100%;height:100%;object-fit:cover;}
-  .poster .ph{color:var(--ink-faint);font-size:12px;text-align:center;padding:12px;line-height:1.5;}
-  .badge{position:absolute;top:9px;left:9px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(17,17,17,.85);color:#fff;backdrop-filter:blur(4px);}
-  .badge.win{background:#0bc200;}
-  .award-tags{position:absolute;top:9px;right:9px;display:flex;flex-direction:column;gap:4px;align-items:flex-end;z-index:2;}
-  .award-tag{font-size:10.5px;font-weight:700;background:linear-gradient(135deg,#f9e8c2 0%,#f3d896 50%,#e8c46a 100%);color:#7a5a1e;padding:3px 9px;border-radius:20px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.4);}
-  .card-title{font-size:15px;font-weight:600;margin-top:12px;line-height:1.35;}
-  .card-meta{font-size:12.5px;color:var(--ink-faint);margin-top:4px;}
-  .empty{color:var(--ink-faint);font-size:14px;padding:60px 0;text-align:center;grid-column:1/-1;}
-  @media(max-width:820px){
-    .app{flex-direction:column;}
-    .panel{width:auto !important;position:relative;height:auto;border-right:none;border-bottom:1px solid var(--line);}
-    .resizer{display:none;}
-  }
+:root{
+  --panel-bg:#FFEFD7;        /* 左栏背景 */
+  --wall-bg:#FFF5E7;         /* 海报墙背景 */
+  --logo:#3B2600;            /* logo / 标题后半 */
+  --line-strong:#000000;     /* 左右分割线 / logo下线 / 筛选器边框文字 */
+  --ink:#000000;             /* 筛选器内 & 片名 */
+  --yearbar-base:#DBCFBC;    /* 年份bar底线 / 海报分割线 */
+  --grid-line:#DBCFBC;
+  --title-front:#FF6F2E;     /* 海报墙标题前半 */
+  --meta:#C2B5A1;            /* 年份+导演 */
+  --tag-oscar:#AB8C73;
+  --tag-cannes:#79AB73;
+  --tag-goldenhorse:#7395AB;
+  --heart:#FF0000;
+  --disabled:#B3A892;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{background:var(--wall-bg);color:var(--ink);
+  font-family:"PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+.app{display:flex;min-height:100vh;}
+
+/* ============ 左栏筛选器 ============ */
+.panel{width:380px;flex-shrink:0;background:var(--panel-bg);
+  border-right:1px solid var(--line-strong);position:sticky;top:0;height:100vh;overflow-y:auto;}
+.panel-inner{padding:0;}
+/* logo 区：上左边距32，下方横线距logo 32 */
+.logo-wrap{padding:32px 0 32px 32px;border-bottom:1px solid var(--line-strong);}
+.logo-wrap svg{height:76px;width:auto;display:block;}
+
+/* ---- 手风琴 ---- */
+.sec.acc{padding:0 32px;}
+.acc-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
+  padding:28px 0 0;}
+.acc-head .ico{width:22px;height:22px;flex-shrink:0;color:var(--ink);display:block;}
+.acc-head .ico svg{width:100%;height:100%;display:block;}
+.sec-title{font-size:18px;font-weight:600;color:var(--ink);letter-spacing:.01em;}
+.chev{width:14px;height:9px;margin-left:4px;flex-shrink:0;
+  background:var(--ink);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 98 56'><path d='M93.5 52L48.5 7L3.5 52' fill='none' stroke='black' stroke-width='10'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 98 56'><path d='M93.5 52L48.5 7L3.5 52' fill='none' stroke='black' stroke-width='10'/></svg>") center/contain no-repeat;
+  transition:transform .2s;}
+.sec.acc:not(.open) .chev{transform:rotate(180deg);}   /* 收起：朝下 */
+.acc-body{overflow:hidden;padding-top:20px;padding-bottom:8px;}
+.sec.acc:not(.open) .acc-body{display:none;}
+.sec.acc.open + .sec.acc .acc-head,
+.sec.acc .acc-head{}
+
+/* 红心入口(无子项)选中态：标题前半色高亮 */
+.sec.acc.entry.sel .sec-title{color:var(--title-front);}
+.sec.acc.entry.sel .ico{color:var(--title-front);}
+
+.sub-label{font-size:14px;color:var(--ink);margin:20px 0 8px;}
+.sub-label:first-of-type{margin-top:0;}
+
+/* tag 网格：两列，gap16 */
+.tag-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+.tag{height:36px;border:1px solid var(--ink);background:transparent;color:var(--ink);
+  font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:0 6px;transition:background .12s,color .12s;line-height:1.2;white-space:nowrap;}
+.tag:hover:not(.on){background:rgba(0,0,0,.05);}
+.tag.on{background:var(--ink);color:var(--panel-bg);}       /* 选中：黑底+背景色字 */
+
+/* 红心区提示 */
+.fav-hint{font-size:13px;color:var(--meta);line-height:1.6;}
+
+/* 年份滑块：自适应左栏内容宽（与两列tag对齐），不再写死像素 */
+.year-block{margin-bottom:4px;}
+.year-val{font-size:14px;color:var(--ink);margin-bottom:10px;font-variant-numeric:tabular-nums;}
+.slider{position:relative;width:100%;height:18px;margin:0 9px;width:calc(100% - 18px);}
+.slider .track-base{position:absolute;top:50%;left:0;right:0;height:1.5px;background:var(--yearbar-base);transform:translateY(-50%);}
+.slider .track-fill{position:absolute;top:50%;height:3px;background:var(--ink);transform:translateY(-50%);}
+.slider .handle{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;
+  background:var(--ink);border:1.5px solid var(--panel-bg);transform:translate(-50%,-50%);cursor:pointer;z-index:2;}
+.year-block.disabled{opacity:.4;pointer-events:none;}
+
+/* ============ 右侧海报墙 ============ */
+.browse{flex:1;min-width:0;background:var(--wall-bg);}
+/* 顶部：海报墙顶与logo下线对齐 → 高度与logo区等高(32+76+32=140)。标题垂直居中，去掉下方横线 */
+.wall-head{padding:0 44px;}
+.wall-head-inner{display:flex;align-items:center;
+  height:140px;}
+.wall-title-wrap{display:flex;flex-direction:column;gap:8px;}
+.wall-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:34px;line-height:1.1;}
+.wall-title .front{color:var(--title-front);}
+.wall-title .back{color:var(--logo);}
+.wall-sub{font-size:16px;color:var(--meta);font-variant-numeric:tabular-nums;}
+/* 排序器：在海报上方16px、与海报墙右对齐 */
+.sort-row{display:flex;justify-content:flex-end;padding:0 44px;margin-bottom:16px;}
+.sorter{display:flex;gap:0;}
+.sortbtn{width:77px;height:36px;border:1px solid var(--ink);background:transparent;color:var(--ink);
+  font-size:13px;font-family:inherit;cursor:pointer;margin-left:-1px;}
+.sortbtn.on{background:var(--ink);color:var(--wall-bg);}
+
+/* 工具组距logo下线40 → 这里指海报网格距标题区。用padding-top实现 */
+.grid{display:grid;grid-template-columns:repeat(5,1fr);padding:0 44px 80px;}
+/* 海报墙左右无线，仅内部分割线。card 等高(stretch)使行底对齐 */
+.card{border-right:1px solid var(--grid-line);border-bottom:1px solid var(--grid-line);
+  padding:21px 22px 24px;position:relative;display:flex;flex-direction:column;}
+.card:nth-child(5n){border-right:none;}   /* 第5列右侧无线 */
+/* 海报框：固定比例(由grid的ratio类决定)，图片contain居中，留白=海报墙底色 */
+.poster{position:relative;width:100%;aspect-ratio:2/3;background:var(--wall-bg);
+  overflow:hidden;line-height:0;}
+.grid.ratio-cc .poster{aspect-ratio:4/5;}     /* 榜单(CC)：4:5 */
+.grid.ratio-award .poster{aspect-ratio:2/3;}  /* 奖项：2:3 */
+.grid.ratio-fav .poster{aspect-ratio:2/3;}    /* 红心跨池：2:3 */
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;}
+/* 红心模式：图片顶边对齐(短海报贴顶、下方留白)，框仍2:3固定→片名/导演保持对齐 */
+.grid.ratio-fav .poster img{object-position:top;}
+.poster .ph{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  color:var(--meta);font-size:12px;text-align:center;padding:10px;background:#ece4d4;line-height:1.3;}
+/* 红心：21x21，右上角距上右各8。未交互不显示；hover显空心；已收藏显实心 */
+.heart{position:absolute;top:8px;right:8px;width:21px;height:21px;cursor:pointer;
+  opacity:0;transition:opacity .15s;z-index:2;}
+.card:hover .heart{opacity:1;}
+.heart.faved{opacity:1;}
+.heart svg{width:100%;height:100%;display:block;}
+
+.card-title{font-size:16px;font-weight:500;color:var(--ink);margin-top:12px;line-height:1.3;}
+.card-title .yr{color:var(--meta);font-weight:400;font-size:14px;margin-left:6px;}
+.card-dir{font-size:14px;font-weight:400;color:var(--meta);margin-top:4px;}
+/* A24 票房行 */
+.card-box{font-size:14px;font-weight:600;color:var(--title-front);margin-top:6px;font-variant-numeric:tabular-nums;}
+/* A24 排名角标(海报左上)，新片(2026新王)标红 */
+.rank-badge{position:absolute;top:0;left:0;z-index:3;min-width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;padding:0 8px;
+  background:var(--ink);color:var(--panel-bg);font-size:18px;font-weight:700;
+  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1;}
+.rank-badge.is-new{background:var(--title-front);}   /* 新片橙底 */
+/* 奖项小角标：距导演12，角标间4，9号字Bold，1px框，hug pad4 */
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;}
+.mini-tag{font-size:9px;font-weight:700;padding:4px;border:1px solid;line-height:1;}
+.mini-tag.oscar{color:var(--tag-oscar);border-color:var(--tag-oscar);}
+.mini-tag.cannes{color:var(--tag-cannes);border-color:var(--tag-cannes);}
+.mini-tag.goldenhorse{color:var(--tag-goldenhorse);border-color:var(--tag-goldenhorse);}
+
+.count-bar{padding:14px 44px 0;font-size:13px;color:var(--meta);}
+
+/* 空状态展位（无数据榜单） */
+.empty-stage{grid-column:1 / -1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:80px 44px 120px;gap:24px;}
+.empty-card{width:200px;height:248px;border:1.5px dashed var(--yearbar-base);border-radius:4px;
+  background:#FBF3E3;display:flex;align-items:center;justify-content:center;}
+.empty-ph{width:64px;height:64px;background:var(--yearbar-base);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 4h18v16H3z' fill='none' stroke='black' stroke-width='1.6'/><circle cx='8' cy='9' r='1.8' fill='black'/><path d='M3 17l5-5 4 4 3-3 6 6' fill='none' stroke='black' stroke-width='1.6'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 4h18v16H3z' fill='none' stroke='black' stroke-width='1.6'/><circle cx='8' cy='9' r='1.8' fill='black'/><path d='M3 17l5-5 4 4 3-3 6 6' fill='none' stroke='black' stroke-width='1.6'/></svg>") center/contain no-repeat;}
+.empty-text{font-size:14px;color:var(--meta);}
 </style>
 </head>
 <body>
 <div class="app">
-  <aside class="panel" id="panel">
-    <div class="brand">
-      <img src="assets/logo.svg" alt="WMS 世界电影大赏"
-           onerror="this.style.display='none';document.getElementById('brandText').style.display='block';">
-      <div class="brand-text" id="brandText" style="display:none;">WMS<small>世界电影大赏</small></div>
-    </div>
-    <div class="search">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input id="q" type="text" placeholder="例: 奥斯卡和电影手册过去5年重合的电影有哪些">
-    </div>
-    <div class="group"><div class="group-row">
-      <span class="group-label">年份</span>
-      <div class="group-body">
-        <div class="range-wrap">
-          <div class="range-track" id="rangeTrack"></div>
-          <input type="range" id="yearMin" class="range-input">
-          <input type="range" id="yearMax" class="range-input">
+  <!-- ============ 左栏 ============ -->
+  <aside class="panel">
+    <div class="panel-inner">
+      <div class="logo-wrap" id="logoWrap"></div>
+
+      <!-- 榜单（默认展开） -->
+      <div class="sec acc" id="listSec" data-mod="list">
+        <div class="acc-head" data-toggle="list">
+          <span class="ico" id="icoRanking"></span><span class="sec-title">榜单</span>
+          <span class="chev"></span>
         </div>
-        <div class="range-label"><span id="yearMinLabel"></span> — <span id="yearMaxLabel"></span></div>
-      </div>
-    </div></div>
-    <div class="group"><div class="group-row">
-      <span class="group-label">奖项</span>
-      <div class="group-body">
-        <div class="toggle" id="winToggle">
-          <button data-mode="获奖" class="on">看获奖</button>
-          <button data-mode="提名">看提名</button>
-        </div>
-        <div class="chips" id="awardChips">
-          <div class="chip on" data-award="oscar_best_picture">奥斯卡金像</div>
-          <div class="chip" data-award="cannes_palme_dor">戛纳金棕榈</div>
-          <div class="chip soon" data-award="berlin">柏林金熊</div>
-          <div class="chip soon" data-award="venice">威尼斯金狮</div>
-          <div class="chip soon" data-award="bluedragon">韩国青龙奖</div>
-          <div class="chip" data-award="golden_horse_best_feature">台北金马</div>
+        <div class="acc-body">
+          <div class="tag-grid">
+            <button class="tag" data-list="cc">CC 年度畅销榜</button>
+            <button class="tag" data-list="a24">A24 年度票房榜</button>
+            <button class="tag" data-list="cahiers" data-empty="1">电影手册年度十佳</button>
+            <button class="tag" data-list="sightsound" data-empty="1">视与听年度十佳</button>
+          </div>
+          <div class="sub-label">媒体</div>
+          <div class="tag-grid">
+            <button class="tag" data-list="fanpai" data-empty="1">反派影评</button>
+            <button class="tag" data-list="xhs" data-empty="1">小红书话题榜</button>
+          </div>
         </div>
       </div>
-    </div></div>
-    <div class="group"><div class="group-row">
-      <span class="group-label">榜单</span>
-      <div class="group-body"><div class="chips">
-        <div class="chip soon">电影手册</div>
-        <div class="chip soon">电影旬报</div>
-        <div class="chip soon">视与听</div>
-        <div class="chip soon">CC</div>
-        <div class="chip soon">Janus Films</div>
-      </div></div>
-    </div></div>
-    <div class="group"><div class="group-row">
-      <span class="group-label">影评人</span>
-      <div class="group-body"><div class="chips">
-        <div class="chip soon">反派影评</div>
-        <div class="chip soon">深焦</div>
-      </div></div>
-    </div></div>
+
+      <!-- 奖项 -->
+      <div class="sec acc" id="awardSec" data-mod="award">
+        <div class="acc-head" data-toggle="award">
+          <span class="ico" id="icoAward"></span><span class="sec-title">奖项</span>
+          <span class="chev"></span>
+        </div>
+        <div class="acc-body">
+          <div class="year-block" id="yearBlock">
+            <div class="year-val" id="yearVal">2020 – 2025</div>
+            <div class="slider" id="slider">
+              <div class="track-base"></div>
+              <div class="track-fill" id="trackFill"></div>
+              <div class="handle" id="hMin"></div>
+              <div class="handle" id="hMax"></div>
+            </div>
+          </div>
+          <div class="sub-label">欧美</div>
+          <div class="tag-grid">
+            <button class="tag" data-aw="cannes">戛纳金棕榈</button>
+            <button class="tag" data-aw="oscar">奥斯卡金像</button>
+            <button class="tag" data-aw="venice" data-empty="1">威尼斯金狮</button>
+            <button class="tag" data-aw="berlin" data-empty="1">柏林金熊</button>
+          </div>
+          <div class="sub-label">亚洲</div>
+          <div class="tag-grid">
+            <button class="tag" data-aw="goldenhorse">台北金马</button>
+            <button class="tag" data-aw="bluedragon" data-empty="1">韩国青龙奖</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 红心 -->
+      <div class="sec acc entry" id="favSec" data-mod="fav">
+        <div class="acc-head" data-select="fav">
+          <span class="ico" id="icoHeart"></span><span class="sec-title">红心</span>
+        </div>
+      </div>
+    </div>
   </aside>
 
-  <div class="resizer" id="resizer"></div>
-
-  <main class="main">
-    <div class="main-head">
-      <div class="main-title" id="resultTitle">—</div>
-      <button class="export">导出为 ▾</button>
+  <!-- ============ 海报墙 ============ -->
+  <main class="browse">
+    <div class="wall-head">
+      <div class="wall-head-inner">
+        <div class="wall-title-wrap">
+          <h1 class="wall-title" id="wallTitle"></h1>
+          <div class="wall-sub" id="wallSub"></div>
+        </div>
+      </div>
     </div>
-    <div class="sort-bar">
-      <span class="sort-label">排序</span>
-      <button class="sort-btn on" data-sort="year-desc">最新优先</button>
-      <button class="sort-btn" data-sort="year-asc">最早优先</button>
+    <div class="sort-row">
+      <div class="sorter">
+        <button class="sortbtn on" id="sNew">最新</button>
+        <button class="sortbtn" id="sOld">最早</button>
+      </div>
     </div>
     <div class="grid" id="grid"></div>
   </main>
 </div>
 
 <script src="data/movies.js"></script>
+<script src="data/cc_list.js"></script>
+<script src="data/a24_list.js"></script>
 <script>
-const state = { yearFrom:null, yearTo:null, mode:'获奖', awards:['oscar_best_picture'], sort:'year-desc' };
-const years = [...new Set(TWMS_DATA.map(d=>d.year))].map(Number).sort((a,b)=>a-b);
-const minYear = years[0], maxYear = years[years.length-1];
-const yearMin = document.getElementById('yearMin');
-const yearMax = document.getElementById('yearMax');
-const track = document.getElementById('rangeTrack');
+/* ===== SVG 资源 ===== */
+var LOGO_SVG = `<svg width="805" height="466" viewBox="0 0 805 466" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M300.347 35.1131H324.952V63.2322H300.347V35.1131ZM320.585 53.6688V44.8192H304.714V53.6688H320.585ZM310.302 0H314.998V16.1292H319.646C320.632 11.2762 321.478 6.2804 322.229 0.856415L326.549 5.42398C325.938 9.42059 325.281 12.989 324.53 16.1292H332.606V46.1038H328.192V27.8336H297.107V46.2465H292.646V16.1292H301.005C300.3 12.4181 299.502 8.99239 298.657 5.85219L302.883 1.14189C303.916 5.28124 304.855 10.277 305.7 16.1292H310.302V0ZM327.723 69.3698V108.908H323.309V81.3597H302.038V110.478H297.624V69.3698H327.723ZM315.702 107.052C321.9 110.906 327.488 115.616 332.559 121.326L330.024 133.173C324.624 126.322 319.083 121.04 313.448 117.329L315.702 107.052ZM310.678 85.7845L315.138 86.9264C314.481 103.198 313.119 113.904 310.959 119.185C308.612 126.036 303.118 130.318 294.431 132.317L292.646 120.041C299.972 119.185 304.761 116.187 307.062 111.049C309.128 106.196 310.302 97.7743 310.678 85.7845Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M244.939 36.5431H262.923C263.205 28.9781 263.393 20.9849 263.44 12.7061V0.288086H267.948V9.56595C267.948 18.9865 267.76 27.9789 267.384 36.5431H286.448V49.6748H268.511C271.798 80.2204 278.137 103.772 287.435 120.472L284.664 131.463C275.649 114.62 269.31 91.0684 265.741 60.8083C262.642 93.4949 256.303 117.475 246.771 132.747L243.906 121.328C253.579 107.055 259.683 83.0751 262.172 49.6748H244.939V36.5431Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M199.796 4.27982H220.551V44.246H211.629L212.192 51.3828H222.711V61.8025H197.354V51.3828H208.013L207.45 44.246H199.796V4.27982ZM216.512 35.3963V28.545H203.787V35.3963H216.512ZM203.787 20.5518H216.512V13.4149H203.787V20.5518ZM200.172 68.5111H220.269V97.4866H212.333V118.612C212.333 126.319 210.972 130.173 208.342 130.173H205.055L204.163 118.326C205.149 118.897 206.088 119.183 206.98 119.183C207.685 119.183 208.06 117.898 208.06 115.614V97.4866H200.172V68.5111ZM216.184 88.066V77.6463H204.257V88.066H216.184ZM201.111 100.484L204.445 105.337C203.224 114.472 201.768 122.465 200.078 129.317L196.885 122.323C198.528 116.185 199.937 108.905 201.111 100.484ZM217.498 100.77C219.189 107.906 220.457 114.329 221.349 119.753L218.203 126.462C217.264 120.467 216.043 113.759 214.446 106.479L217.498 100.77ZM235.577 0.283203L238.3 9.70379C234.544 21.2654 229.895 30.8288 224.354 38.3938L222.523 26.8321C227.829 19.9808 232.196 11.1312 235.577 0.283203ZM236.844 37.8228L239.568 47.2434C235.671 60.5179 230.928 71.5086 225.293 80.0728L223.462 68.6539C228.909 60.8034 233.37 50.5264 236.844 37.8228ZM237.267 74.6488L240.695 82.4993C236.844 105.052 231.069 121.324 223.462 131.172L221.678 118.754C228.58 109.762 233.792 95.0601 237.267 74.6488Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M158.387 61.5193V79.3614H168.811V61.5193H158.387ZM168.811 92.0649H158.387V103.341H153.926V18.413H168.811V0H173.272V18.413H188.439V92.0649H173.272V106.481C173.272 113.19 174.258 116.616 176.23 116.616H186.466C187.405 116.616 188.157 115.759 188.626 114.332C189.002 112.904 189.284 107.623 189.425 98.7735L193.698 103.198C193.416 115.474 192.852 122.896 192.007 125.608C191.115 128.034 189.519 129.319 187.218 129.319H175.197C170.924 129.319 168.811 122.325 168.811 108.48V92.0649ZM173.272 79.3614H184.025V61.5193H173.272V79.3614ZM184.025 49.1013V31.2592H173.272V49.1013H184.025ZM168.811 31.2592H158.387V49.1013H168.811V31.2592Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M108.41 4.42383H141.467V63.5167H133.109C136.114 73.08 140.669 80.7877 146.773 86.4972L144.848 98.487C140.716 93.634 137.241 88.0673 134.424 81.7869V131.745H129.916V77.2193H132.499C130.808 72.7945 129.446 68.227 128.319 63.5167H121.37C120.102 68.3697 118.646 72.9373 116.956 77.0766H120.525C120.525 88.4955 119.961 98.3443 118.834 106.338C117.473 116.615 114.28 125.036 109.255 131.887L106.297 121.039C110.429 115.901 113.153 109.478 114.467 101.913C115.407 96.0605 115.923 88.4955 116.017 79.3604C113.012 86.069 109.443 92.0639 105.217 97.2024L102.822 85.3553C108.927 79.5031 113.481 72.2236 116.486 63.5167H108.41V4.42383ZM137.194 51.6695V39.3942H127.005V51.6695H137.194ZM122.685 51.6695V39.3942H112.683V51.6695H122.685ZM112.683 28.2608H122.685V16.4137H112.683V28.2608ZM127.005 16.4137V28.2608H137.194V16.4137H127.005Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M56.582 32.5427H62.2168V1.42623H66.7715V32.5427H75.2236V0.141602H79.5905V32.5427H88.0896V0.141602H92.4565V32.5427H99.1712V45.5317H92.4565V90.4937H75.2236V45.5317H66.7715V112.332H97.5747V126.178H62.2168V45.5317H56.582V32.5427ZM79.5905 45.5317V77.3619H88.0896V45.5317H79.5905Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M302.575 413.579C307.688 413.579 311.838 411.928 315.028 408.628C321.078 402.302 324.103 390.544 324.103 373.354C324.103 363.315 322.602 355.545 319.601 350.044C316.599 344.681 311.885 339.937 305.46 335.811L294.485 328.591C283.697 321.44 276.24 313.67 272.112 305.282C265.124 291.255 261.63 269.32 261.63 239.478C261.63 212.25 265.007 189.628 271.761 171.612C278.515 153.597 288.434 144.59 301.52 144.59C312.448 144.59 321.758 153.116 329.45 170.169C337.189 187.083 341.246 211.699 341.621 244.017H320.797C320.421 225.727 317.701 212.731 312.636 205.03C309.259 199.942 305.061 197.397 300.043 197.397C294.461 197.397 290.006 200.698 286.676 207.299C283.345 213.9 281.68 223.114 281.68 234.94C281.68 245.804 283.322 253.918 286.605 259.281C288.716 262.857 293.218 267.051 300.113 271.864L317.983 284.447C325.815 289.948 331.725 297.306 335.711 306.519C341.903 320.821 344.998 341.518 344.998 368.61C344.998 396.389 341.363 419.492 334.093 437.92C326.87 456.21 316.646 465.355 303.419 465.355C289.912 465.355 279.288 456.347 271.55 438.332C263.811 420.179 259.941 395.288 259.941 363.659H280.625C281.282 377.548 282.572 387.931 284.495 394.807C288.012 407.321 294.039 413.579 302.575 413.579Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M164.762 457.518H144.57V153.462H176.088L194.943 392.54L213.657 153.462H244.823V457.518H224.632V251.857C224.632 245.944 224.655 237.693 224.702 227.104C224.749 216.377 224.773 208.126 224.773 202.35L205.144 457.518H184.109L164.621 202.35C164.621 208.126 164.644 216.377 164.691 227.104C164.738 237.693 164.762 245.944 164.762 251.857V457.518Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path d="M109.75 153.462H131.771L102.574 457.518H81.8907L69.3679 279.705L65.7096 220.915L62.0512 279.705L49.5284 457.518H29.4075L0 153.462H23.0054L36.7242 327.562L39.679 376.038L42.7042 328.593L54.3828 153.462H77.2475L89.5592 327.562L92.7251 376.038L95.891 329.418L109.75 153.462Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M698.696 249.881V299.676C699.275 305.364 703.563 315.628 716.069 311.171L780.684 288.88L805 306.991V396.141L780.684 414.247L716.069 391.962C710.279 390.917 698.696 391.614 698.696 402.757V444.198L679.243 463.7H404.106L385 445.589V249.881L404.106 230.726H412.446C420.367 229.391 424.035 227.622 427.021 224.745C431.575 220.355 432.566 214.678 429.79 208.885C429.527 208.335 428.865 207.294 427.979 206.014C426.828 204.355 425.3 202.284 423.774 200.35C410.212 183.149 407.193 164.995 414.785 146.293C417.514 139.571 420.984 134.494 426.616 128.988C436.016 119.8 443.575 116.721 459.575 115.565C477.122 114.299 483.923 116.593 498.198 128.592C502.587 132.28 507.651 136.061 509.453 136.991C518.05 141.423 526.349 136.804 529.541 125.809C536.049 103.397 540.059 95.9276 552.295 83.4313C562.521 72.9863 571.728 67.1306 583.994 63.2701C589.86 61.4239 598.791 59.4943 603.447 59.0709L604.819 58.944L604.956 58.9342C605.544 58.8792 606.093 58.8256 606.528 58.7828L606.929 58.7438L607.271 58.7047C607.747 58.6551 610.052 58.8292 612.764 59.11C613.349 59.1708 613.955 59.236 614.565 59.3053C642.654 62.5043 664.012 76.6263 677.974 101.224C688.223 119.279 690.488 143.139 683.784 162.494C681.835 168.122 675.708 179.838 672.275 184.51C670.669 186.693 665.378 192.63 660.513 197.704C655.646 202.779 651.214 208.02 650.659 209.349C648.107 215.475 650.496 222.783 656.099 225.985C659.598 227.985 660.693 228.261 668.74 229.178C671.143 229.452 677.746 230.2 679.59 230.726L698.696 249.881ZM551.055 230.726C552.438 230.493 554.092 229.785 555.464 229.247C562.689 226.411 567.699 219.927 567.651 213.47C567.624 209.909 565.222 205.908 560.977 202.347C553.976 196.478 546.655 188.758 541.094 181.38C537.48 176.587 534.74 173.692 532.651 172.464C528.468 170.007 525.573 169.688 522.119 171.302C518.096 173.182 514.973 177.202 509.99 186.918C507.591 191.595 503.635 198.04 501.196 201.244C498.76 204.445 496.334 207.906 495.801 208.939C492.197 215.924 495.057 223.781 502.524 227.401C506.015 229.092 510.367 230.3 519.79 230.726H551.055Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2298 0.1499 0.0000);fill-opacity:1;"/>
+</svg>`;
+/* 红心：方底(自写) + 用户导出心形path。Fav=红底白心，Unfav=白底红线框心 */
+var HEART_FAV = `<svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg"><rect width="84" height="84" rx="3" fill="#FF0000"/><g transform="translate(9.5 12)"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.75 0H9.75L0 12.6316V34.7368L29.25 60H35.75L65 34.7368V12.6316L55.25 0H42.25L32.5 9.47368L22.75 0Z" fill="#fff"/></g></svg>`;
+var HEART_UNFAV = `<svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg"><rect width="84" height="84" rx="3" fill="#fff"/><g transform="translate(9.5 12)"><path d="M21.7354 2.5L30.7578 11.2666L32.5 12.96L34.2422 11.2666L43.2646 2.5H54.0215L62.5 13.4844V33.5928L34.8203 57.5H30.1797L2.5 33.5928V13.4844L10.9785 2.5H21.7354Z" fill="none" stroke="#FF0000" stroke-width="5"/></g></svg>`;
+document.getElementById('logoWrap').innerHTML = LOGO_SVG;
 
-[yearMin, yearMax].forEach(s=>{ s.min=minYear; s.max=maxYear; s.step=1; });
-// 默认最近5年
-const defaultFrom = Math.max(minYear, maxYear-4);
-yearMin.value = defaultFrom;
-yearMax.value = maxYear;
-state.yearFrom = defaultFrom;
-state.yearTo = maxYear;
+/* 左栏 section icon（替换 emoji），用 currentColor 跟随文字色 */
+var ICO_AWARD = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M90 10H30V70L40 80H80L90 70V10Z" fill="currentColor"/><path d="M100 20H85V60L100 45V20Z" fill="currentColor"/><path d="M20 20H35V60L20 45V20Z" fill="currentColor"/><rect x="55" y="75" width="10" height="25" fill="currentColor"/><rect x="85" y="100" width="10" height="50" transform="rotate(90 85 100)" fill="currentColor"/></svg>`;
+var ICO_RANKING = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M43.3345 43.3301H10V109.996H43.3345V43.3301Z" fill="currentColor"/><path d="M76.6743 10H43.3398V109.999H76.6743V10Z" fill="currentColor"/><path d="M110.014 65.5566H76.6797V110.001H110.014V65.5566Z" fill="currentColor"/></svg>`;
+var ICO_HEART = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M45 15H25L10 33.9474V67.1053L55 105H65L110 67.1053V33.9474L95 15H75L60 29.2105L45 15Z" fill="currentColor"/></svg>`;
+document.getElementById('icoAward').innerHTML = ICO_AWARD;
+document.getElementById('icoRanking').innerHTML = ICO_RANKING;
+document.getElementById('icoHeart').innerHTML = ICO_HEART;
 
-// 填充进度条 + 标签
-function updateRangeUI(){
-  let lo = Math.min(+yearMin.value, +yearMax.value);
-  let hi = Math.max(+yearMin.value, +yearMax.value);
-  document.getElementById('yearMinLabel').textContent = lo;
-  document.getElementById('yearMaxLabel').textContent = hi;
-  const pctLo = (lo-minYear)/(maxYear-minYear)*100;
-  const pctHi = (hi-minYear)/(maxYear-minYear)*100;
-  let fill = track.querySelector('.range-fill');
-  if(!fill){ fill=document.createElement('div'); fill.className='range-fill'; track.appendChild(fill); }
-  fill.style.left = pctLo+'%';
-  fill.style.width = (pctHi-pctLo)+'%';
+var AW={oscar:'奥斯卡',cannes:'戛纳',goldenhorse:'金马'};
+var AWNAME={oscar:'奥斯卡金像',cannes:'戛纳金棕榈',goldenhorse:'金马最佳'};
+var AWKEY={oscar_best_picture:'oscar',cannes_palme_dor:'cannes',golden_horse_best_feature:'goldenhorse'};
+
+/* ===== 奖项库聚合 ===== */
+var AWARD_INDEX={};
+TWMS_DATA.forEach(function(d){
+  var k=AWKEY[d.award_key];
+  if(!AWARD_INDEX[d.tmdb_id])AWARD_INDEX[d.tmdb_id]={info:d,awards:[]};
+  AWARD_INDEX[d.tmdb_id].awards.push({key:k,type:d.type,year:+d.year});
+});
+var CN2AWARDS={};
+Object.values(AWARD_INDEX).forEach(function(rec){
+  var keys=[];rec.awards.forEach(function(a){if(keys.indexOf(a.key)<0)keys.push(a.key);});
+  CN2AWARDS[rec.info.title_cn]=keys;
+});
+
+/* ===== 年份范围 ===== */
+var YEAR_MIN=1927,YEAR_MAX=2025;
+
+/* ===== 状态 ===== */
+var state={
+  mode:'list',                        // 当前选中内容(全局唯一)：list/award/fav
+  open:{list:true, award:false},      // 展开状态(可多开,独立于mode)；红心无展开
+  awards:['cannes'],                  // 奖项默认选戛纳(进奖项时生效)
+  yearRange:[2020,2025],              // 默认最近5年
+  list:'cc',
+  sort:'new',
+  favs:{},                            // 收藏：title_cn -> true
+  pendingRemove:{},                   // 红心模式下刚取消、暂留到下次进入前
+  awardTouched:false,                 // 奖项是否被点过(初始未处理)
+  empty:null                          // 当前空状态榜单key(无数据项)
+};
+
+var grid=document.getElementById('grid');
+
+/* ---- 取数据 ---- */
+function awardArr(){
+  // 候选：在年份范围内、得过"某个已选奖"的片，记录它得过哪些已选奖
+  var cand={};
+  TWMS_DATA.forEach(function(d){
+    var k=AWKEY[d.award_key];
+    if(state.awards.indexOf(k)<0)return;
+    if(d.type!=='获奖')return;
+    var y=+d.year;
+    if(y<state.yearRange[0]||y>state.yearRange[1])return;
+    if(!cand[d.tmdb_id]){cand[d.tmdb_id]={rec:AWARD_INDEX[d.tmdb_id],hit:{}};}
+    cand[d.tmdb_id].hit[k]=true;
+  });
+  // 多选=交集(AND)：必须命中所有已选奖；单选=该奖全部
+  var need=state.awards.length;
+  return Object.values(cand).filter(function(c){
+    return Object.keys(c.hit).length>=need;   // 命中数≥已选奖数 → 全中
+  }).map(function(c){
+    var rec=c.rec;
+    return {title:rec.info.title_cn,year:+rec.info.year,poster:rec.info.poster,
+      dir:(rec.info.directors||[]).join('·'),
+      awardKeys:state.awards.filter(function(k){return c.hit[k];})};
+  });
+}
+function listArr(){
+  return CC_DATA.map(function(d){
+    var y=d.is_boxset?null:((''+d.year).match(/\d{4}/)?+(''+d.year).match(/\d{4}/)[0]:null);
+    return {title:d.title_cn,year:y,poster:d.poster,dir:d.director||'',
+      awardKeys:CN2AWARDS[d.title_cn]||[]};
+  });
+}
+function a24Arr(){
+  return A24_DATA.map(function(d){
+    return {title:d.title_cn,year:d.year,poster:d.poster,dir:d.director||'',
+      box:d.box,rank:d.rank,is_new:d.is_new,
+      awardKeys:CN2AWARDS[d.title_cn]||[]};
+  });
+}
+function favArr(){
+  // 跨池：奖项库 + CC库 中所有被收藏的；外加本次"刚取消但暂留"的
+  var out=[],seen={};
+  function keep(t){return state.favs[t]||state.pendingRemove[t];}
+  Object.values(AWARD_INDEX).forEach(function(rec){
+    var t=rec.info.title_cn;
+    if(keep(t)&&!seen[t]){
+      seen[t]=1;
+      out.push({title:t,year:+rec.info.year,poster:rec.info.poster,
+        dir:(rec.info.directors||[]).join('·'),
+        awardKeys:CN2AWARDS[t]||[]});
+    }
+  });
+  CC_DATA.forEach(function(d){
+    var t=d.title_cn;
+    if(keep(t)&&!seen[t]){
+      seen[t]=1;var y=d.is_boxset?null:((''+d.year).match(/\d{4}/)?+(''+d.year).match(/\d{4}/)[0]:null);
+      out.push({title:t,year:y,poster:d.poster,dir:d.director||'',
+        awardKeys:CN2AWARDS[t]||[]});
+    }
+  });
+  return out;
 }
 
-// 拖动时只更新 UI（标签和进度条），不刷新结果
-yearMin.addEventListener('input', updateRangeUI);
-yearMax.addEventListener('input', updateRangeUI);
-// 松手才更新结果
-function commitYear(){
-  state.yearFrom = Math.min(+yearMin.value, +yearMax.value);
-  state.yearTo = Math.max(+yearMin.value, +yearMax.value);
-  render();
-}
-yearMin.addEventListener('change', commitYear);
-yearMax.addEventListener('change', commitYear);
+var EMPTY_NAME={a24:'A24 年度话题榜',cahiers:'电影手册年度十佳',sightsound:'视与听年度十佳',fanpai:'反派影评',xhs:'小红书话题榜',venice:'威尼斯金狮',berlin:'柏林金熊',bluedragon:'韩国青龙奖'};
 
-updateRangeUI();
-// === 年份条：hover显示年份 + 点击就近跳转 ===
-(function(){
-  const wrap = document.querySelector('.range-wrap');
-  const bubble = document.createElement('div');
-  bubble.className = 'range-bubble';
-  wrap.appendChild(bubble);
+function render(){
+  // 空状态（点了无数据项）
+  if(state.empty){
+    var nm=EMPTY_NAME[state.empty]||'该榜单';
+    document.getElementById('wallTitle').innerHTML='<span class="front">'+nm+'</span>';
+    document.getElementById('wallSub').textContent='数据整理中';
+    document.querySelector('.sort-row').style.visibility='hidden';
+    grid.innerHTML='<div class="empty-stage">'+
+      '<div class="empty-card"><div class="empty-ph"></div></div>'+
+      '<div class="empty-text">该榜单数据整理中，敬请期待</div></div>';
+    return;
+  }
+  document.querySelector('.sort-row').style.visibility='';
 
-  function yearAtX(clientX){
-    const rect = wrap.getBoundingClientRect();
-    let pct = (clientX - rect.left) / rect.width;
-    pct = Math.max(0, Math.min(1, pct));
-    return Math.round(minYear + pct * (maxYear - minYear));
+  var isA24=(state.mode==='list' && state.list==='a24');
+  var arr;
+  if(state.mode==='award')arr=awardArr();
+  else if(state.mode==='list')arr=(state.list==='a24'?a24Arr():listArr());
+  else arr=favArr();
+
+  // A24 默认按票房排名(rank)；其余按年份
+  if(isA24){
+    arr.sort(function(a,b){return state.sort==='new'?a.rank-b.rank:b.rank-a.rank;});
+  }else{
+    arr.sort(function(a,b){return state.sort==='new'?b.year-a.year:a.year-b.year;});
   }
 
-  wrap.addEventListener('mousemove', e=>{
-    const yr = yearAtX(e.clientX);
-    const rect = wrap.getBoundingClientRect();
-    bubble.textContent = yr;
-    bubble.style.left = (e.clientX - rect.left) + 'px';
-    bubble.classList.add('show');
-  });
-  wrap.addEventListener('mouseleave', ()=>{ bubble.classList.remove('show'); });
+  // 海报框比例：CC榜单4:5 / A24和奖项2:3 / 红心2:3
+  grid.classList.remove('ratio-cc','ratio-award','ratio-fav');
+  grid.classList.add((state.mode==='list'&&!isA24)?'ratio-cc':'ratio-award');
 
-  wrap.addEventListener('click', e=>{
-    const yr = yearAtX(e.clientX);
-    const distMin = Math.abs(yr - +yearMin.value);
-    const distMax = Math.abs(yr - +yearMax.value);
-    if(distMin <= distMax){
-      yearMin.value = yr;
-    } else {
-      yearMax.value = yr;
-    }
-    updateRangeUI();
-    commitYear();
-  });
-})();
-document.querySelectorAll('#winToggle button').forEach(b=>{
-  b.onclick = ()=>{
-    document.querySelectorAll('#winToggle button').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on'); state.mode = b.dataset.mode; render();
-  };
-});
-document.querySelectorAll('#awardChips .chip:not(.soon)').forEach(c=>{
-  c.onclick = ()=>{
-    const key = c.dataset.award;
-    if(state.awards.includes(key)){
-      if(state.awards.length > 1){
-        state.awards = state.awards.filter(a=>a!==key);
-        c.classList.remove('on');
-      }
-    } else {
-      state.awards.push(key);
-      c.classList.add('on');
-    }
-    render();
-  };
-});
-const AWARD_NAMES = { oscar_best_picture:'奥斯卡', golden_horse_best_feature:'金马', cannes_palme_dor:'戛纳' };
-const AWARD_TAGS = { oscar_best_picture:'奥斯卡金像', golden_horse_best_feature:'金马最佳', cannes_palme_dor:'戛纳金棕榈' };
-function render(){
-  const lo = Math.min(+state.yearFrom, +state.yearTo);
-  const hi = Math.max(+state.yearFrom, +state.yearTo);
-  let list = TWMS_DATA.filter(d=>{
-    if(!state.awards.includes(d.award_key)) return false;
-    if(+d.year < lo || +d.year > hi) return false;
-    if(state.mode === '获奖') return d.type === '获奖';
-    return true;
-  });
-  const seen = new Set();
-  list = list.filter(d=>{
-    if(d.tmdb_id && seen.has(d.tmdb_id)) return false;
-    if(d.tmdb_id) seen.add(d.tmdb_id);
-    return true;
-  });
-  list.sort((a,b)=> state.sort==='year-asc' ? (+a.year)-(+b.year) : (+b.year)-(+a.year));
-  const yearText = lo===hi ? `${lo}年` : `${lo}–${hi}`;
-  const awardText = state.awards.map(a=>AWARD_NAMES[a]||'').join(' + ');
-  document.getElementById('resultTitle').innerHTML =
-    `${yearText} ${awardText} 最佳影片<span class="sub">${list.length} 部</span>`;
-  const grid = document.getElementById('grid');
-  if(!list.length){ grid.innerHTML = '<div class="empty">这个范围内没有记录。</div>'; return; }
-  grid.innerHTML = list.map(d=>{
-    const title = d.title_cn || d.tmdb_title_cn;
-    const directors = (d.directors && d.directors.length) ? d.directors.join('、') : '导演待补';
-    let awardTags = '';
-    if(state.awards.length > 1){
-      const awardsOfFilm = [...new Set(
-        TWMS_DATA.filter(x=>x.tmdb_id===d.tmdb_id && state.awards.includes(x.award_key))
-                 .map(x=>x.award_key)
-      )];
-      awardTags = awardsOfFilm.map(a=>`<span class="award-tag">${AWARD_TAGS[a]||''}</span>`).join('');
-    }
-    return `<div class="card">
-      <div class="poster">
-        ${d.poster ? `<img src="${d.poster}" alt="${title}" loading="lazy">` : `<div class="ph">${title}<br><span style="font-size:11px">（暂无海报）</span></div>`}
-        ${state.mode==='提名' ? `<span class="badge ${d.type==='获奖'?'win':''}">${d.type}</span>` : ''}
-        ${awardTags ? `<div class="award-tags">${awardTags}</div>` : ''}
-      </div>
-      <div class="card-title">${title}（${d.year}）</div>
-      <div class="card-meta">${directors}</div>
-    </div>`;
+  // 标题 + 副属性行
+  var wt=document.getElementById('wallTitle');
+  var ws=document.getElementById('wallSub');
+  if(state.mode==='award'){
+    var names=state.awards.map(function(k){return AW[k];}).join(' + ');
+    var suffix=(state.awards.length===1?'获奖电影':'最佳影片');  // 交集→最佳影片
+    wt.innerHTML='<span class="front">'+names+'</span> <span class="back">'+suffix+'</span>';
+    ws.textContent=arr.length+'部 · '+state.yearRange[0]+'–'+state.yearRange[1];
+  }else if(isA24){
+    wt.innerHTML='<span class="front">A24</span> <span class="back">年度票房榜</span>';
+    ws.innerHTML='10部 · 全球票房 · <span style="color:var(--title-front)">新王登基</span>';
+  }else if(state.mode==='list'){
+    wt.innerHTML='<span class="front">CC 标准收藏</span> <span class="back">年度畅销榜</span>';
+    ws.textContent=arr.length+'部 · 今年';
+  }else{
+    wt.innerHTML='<span class="front">我的红心</span> <span class="back">收藏夹</span>';
+    ws.textContent=arr.length+'部';
+  }
+
+  // 获奖角标显示规则：
+  // - CC/A24/红心：显示(标注这片得过哪些奖)
+  // - 奖项单选：不显示(全是同一个奖，重复废话)
+  // - 奖项多选(交集)：显示(让观众分清每部到底得了哪几个奖)
+  var showTags = (state.mode!=='award') || (state.awards.length>1);
+
+  // 网格
+  grid.innerHTML=arr.map(function(f){
+    var p=f.poster?'<img src="'+f.poster+'" loading="lazy" onerror="this.onerror=null;this.outerHTML=\'<div class=ph>'+f.title+'</div>\'">':'<div class="ph">'+f.title+'</div>';
+    var faved=!!state.favs[f.title];
+    var heart='<div class="heart '+(faved?'faved':'')+'" data-title="'+encodeURIComponent(f.title)+'">'+(faved?HEART_FAV:HEART_UNFAV)+'</div>';
+    var tags=(showTags&&f.awardKeys&&f.awardKeys.length)?
+      '<div class="card-tags">'+f.awardKeys.map(function(k){return '<span class="mini-tag '+k+'">'+AWNAME[k]+'</span>';}).join('')+'</div>':'';
+    // A24：排名角标 + 票房
+    var rankBadge=isA24?'<div class="rank-badge'+(f.is_new?' is-new':'')+'">'+f.rank+'</div>':'';
+    var boxLine=isA24?'<div class="card-box">'+f.box+'</div>':'';
+    return '<div class="card"><div class="poster">'+rankBadge+p+heart+'</div>'+
+      '<div class="card-title">'+f.title+(f.year?'<span class="yr">'+f.year+'</span>':'')+'</div>'+
+      '<div class="card-dir">'+f.dir+'</div>'+boxLine+tags+'</div>';
   }).join('');
 }
-(function(){
-  const resizer = document.getElementById('resizer');
-  let dragging = false;
-  resizer.addEventListener('mousedown', e=>{ dragging=true; resizer.classList.add('active'); e.preventDefault(); });
-  window.addEventListener('mousemove', e=>{
-    if(!dragging) return;
-    const min = 280, max = Math.floor(window.innerWidth/3);
-    let w = Math.max(min, Math.min(max, e.clientX));
-    document.documentElement.style.setProperty('--panel-w', w+'px');
+
+/* ===== 展开/选中分离模型 =====
+   - state.open{list,award}: 展开状态，可多开，纯视觉
+   - state.mode: 全局唯一选中内容(list/award/fav)
+   - 选中跨模块互斥：点任一具体项，其余模块选中全部清空
+*/
+
+// 统一刷新左栏UI（展开 + 选中高亮）
+function syncUI(){
+  // 展开态：榜单/奖项按 state.open；红心是入口无展开
+  document.querySelectorAll('.sec.acc:not(.entry)').forEach(function(sec){
+    sec.classList.toggle('open', !!state.open[sec.dataset.mod]);
   });
-  window.addEventListener('mouseup', ()=>{ dragging=false; resizer.classList.remove('active'); });
-})();
-document.querySelectorAll('.sort-btn').forEach(b=>{
-  b.onclick = ()=>{
-    document.querySelectorAll('.sort-btn').forEach(x=>x.classList.remove('on'));
-    b.classList.add('on');
-    state.sort = b.dataset.sort;
-    render();
-  };
+  // 榜单 tag 选中：仅当 mode===list 且非空状态，高亮当前 list
+  document.querySelectorAll('#listSec .tag[data-list]').forEach(function(t){
+    t.classList.toggle('on', state.mode==='list' && !state.empty && !t.dataset.empty && t.dataset.list===state.list);
+  });
+  // 奖项 tag 选中：仅当 mode===award 且非空状态，高亮已选(可多选)
+  document.querySelectorAll('#awardSec .tag[data-aw]').forEach(function(t){
+    t.classList.toggle('on', state.mode==='award' && !state.empty && !t.dataset.empty && state.awards.indexOf(t.dataset.aw)>=0);
+  });
+  // 红心入口选中态
+  document.getElementById('favSec').classList.toggle('sel', state.mode==='fav' && !state.empty);
+  // 年份滑块仅奖项选中时可用
+  document.getElementById('yearBlock').classList.toggle('disabled', state.mode!=='award');
+}
+
+// 切换右侧内容(全局唯一选中)
+function selectContent(m){
+  if(m==='fav' && state.mode!=='fav'){ state.pendingRemove={}; }
+  state.mode=m;
+  state.empty=null;
+  syncUI();
+  render();
+}
+
+// 纯展开/收起(不改选中内容)
+function toggleOpen(mod){
+  state.open[mod]=!state.open[mod];
+  syncUI();
+}
+
+/* ---- 点无数据项 → 空状态 ---- */
+function showEmpty(key){
+  state.empty=key;
+  syncUI();
+  render();
+}
+
+/* ---- 榜单/奖项标题：点击只展开/收起，不切内容 ---- */
+document.querySelectorAll('.acc-head[data-toggle]').forEach(function(h){
+  h.addEventListener('click',function(){ toggleOpen(h.dataset.toggle); });
 });
-render();
+/* ---- 红心标题(入口)：点击即选中显示收藏夹 ---- */
+document.querySelector('.acc-head[data-select="fav"]').addEventListener('click',function(){
+  selectContent('fav');
+});
+
+/* ---- 奖项 tag 点击：选中(多选)，跨模块互斥 ---- */
+document.querySelectorAll('#awardSec .tag[data-aw]').forEach(function(t){
+  t.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(t.dataset.empty){ showEmpty(t.dataset.aw); return; }
+    state.awardTouched=true;
+    var k=t.dataset.aw;
+    if(state.mode!=='award' || state.empty){
+      // 从别的模式/空状态切入奖项：本次点击的项成为唯一选中
+      state.awards=[k];
+      selectContent('award');
+      return;
+    }
+    // 已在奖项模式：多选增删
+    var i=state.awards.indexOf(k);
+    if(i>=0){ if(state.awards.length>1)state.awards.splice(i,1); }
+    else state.awards.push(k);
+    selectContent('award');
+  });
+});
+/* ---- 榜单 tag 点击：单选，跨模块互斥 ---- */
+document.querySelectorAll('#listSec .tag[data-list]').forEach(function(t){
+  t.addEventListener('click',function(e){
+    e.stopPropagation();
+    if(t.dataset.empty){ showEmpty(t.dataset.list); return; }
+    state.list=t.dataset.list;
+    selectContent('list');
+  });
+});
+/* ---- 排序 ---- */
+document.getElementById('sNew').onclick=function(){state.sort='new';this.classList.add('on');document.getElementById('sOld').classList.remove('on');render();};
+document.getElementById('sOld').onclick=function(){state.sort='old';this.classList.add('on');document.getElementById('sNew').classList.remove('on');render();};
+
+/* ---- 红心点击(事件委托) ---- */
+grid.addEventListener('click',function(e){
+  var h=e.target.closest('.heart');if(!h)return;
+  var title=decodeURIComponent(h.dataset.title);
+  var nowFaved=!!state.favs[title];
+  if(nowFaved){
+    delete state.favs[title];
+    // 红心模式下：暂留在收藏页，右上角红心变未标记，下次进入才消失
+    if(state.mode==='fav'){ state.pendingRemove[title]=true; }
+  }else{
+    state.favs[title]=true;
+    delete state.pendingRemove[title];
+  }
+  // 统一只切图标，不移除卡片（红心模式靠 pendingRemove 暂留）
+  var faved=!!state.favs[title];
+  h.classList.toggle('faved',faved);
+  h.innerHTML=faved?HEART_FAV:HEART_UNFAV;
+});
+
+/* ===== 年份双滑块 ===== */
+(function(){
+  var slider=document.getElementById('slider'),fill=document.getElementById('trackFill'),
+      hMin=document.getElementById('hMin'),hMax=document.getElementById('hMax'),val=document.getElementById('yearVal');
+  function pct(y){return (y-YEAR_MIN)/(YEAR_MAX-YEAR_MIN)*100;}
+  function update(){
+    var a=state.yearRange[0],b=state.yearRange[1];
+    hMin.style.left=pct(a)+'%';hMax.style.left=pct(b)+'%';
+    fill.style.left=pct(a)+'%';fill.style.width=(pct(b)-pct(a))+'%';
+    val.textContent=a+' – '+b;
+  }
+  function drag(handle,isMin){
+    handle.addEventListener('mousedown',function(e){
+      e.preventDefault();
+      var rect=slider.getBoundingClientRect();
+      function move(ev){
+        var p=Math.min(1,Math.max(0,(ev.clientX-rect.left)/rect.width));
+        var y=Math.round(YEAR_MIN+p*(YEAR_MAX-YEAR_MIN));
+        if(isMin){ y=Math.min(y,state.yearRange[1]); state.yearRange[0]=y; }
+        else { y=Math.max(y,state.yearRange[0]); state.yearRange[1]=y; }
+        update();
+        if(state.mode==='award')render();
+      }
+      function up(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up);}
+      document.addEventListener('mousemove',move);document.addEventListener('mouseup',up);
+    });
+  }
+  drag(hMin,true);drag(hMax,false);
+  update();
+})();
+
+/* ===== 初始：榜单展开+CC选中，奖项收起，红心未选 ===== */
+selectContent('list');
+syncUI();
 </script>
 </body>
 </html>
