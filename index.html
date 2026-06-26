@@ -37,6 +37,7 @@ body{background:var(--wall-bg);color:var(--ink);
 
 /* ---- 手风琴 ---- */
 .sec.acc{padding:0 32px;}
+.sec.acc + .sec.acc{margin-top:32px;}
 .acc-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;
   padding:28px 0 0;}
 .acc-head .ico{width:22px;height:22px;flex-shrink:0;color:var(--ink);display:block;}
@@ -70,6 +71,7 @@ body{background:var(--wall-bg);color:var(--ink);
 
 /* 红心区提示 */
 .fav-hint{font-size:13px;color:var(--meta);line-height:1.6;}
+.fav-count{font-size:16px;font-weight:400;color:var(--ink);margin-left:4px;position:relative;top:2px;}
 
 /* 年份滑块：自适应左栏内容宽（与两列tag对齐），不再写死像素 */
 .year-block{margin-bottom:4px;}
@@ -127,13 +129,15 @@ body{background:var(--wall-bg);color:var(--ink);
 .card-title .yr{color:var(--meta);font-weight:400;font-size:14px;margin-left:6px;}
 .card-dir{font-size:14px;font-weight:400;color:var(--meta);margin-top:4px;}
 /* A24 票房行 */
-.card-box{font-size:14px;font-weight:600;color:var(--title-front);margin-top:6px;font-variant-numeric:tabular-nums;}
-/* A24 排名角标(海报左上)，新片(2026新王)标红 */
-.rank-badge{position:absolute;top:0;left:0;z-index:3;min-width:34px;height:34px;
-  display:flex;align-items:center;justify-content:center;padding:0 8px;
-  background:var(--ink);color:var(--panel-bg);font-size:18px;font-weight:700;
+.card-box{font-size:14px;font-weight:600;color:var(--title-front);font-variant-numeric:tabular-nums;}
+/* A24 海报上方一行：排名角标 + 票房 */
+.a24-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.rank-badge{flex-shrink:0;min-width:30px;height:26px;
+  display:flex;align-items:center;justify-content:center;padding:0 7px;
+  background:var(--ink);color:var(--panel-bg);font-size:16px;font-weight:700;
   font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1;}
-.rank-badge.is-new{background:var(--title-front);}   /* 新片橙底 */
+.rank-badge.is-new{background:var(--title-front);}
+.a24-box{font-size:14px;font-weight:600;color:var(--title-front);font-variant-numeric:tabular-nums;}
 /* 奖项小角标：距导演12，角标间4，9号字Bold，1px框，hug pad4 */
 .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;}
 .mini-tag{font-size:9px;font-weight:700;padding:4px;border:1px solid;line-height:1;}
@@ -216,7 +220,7 @@ body{background:var(--wall-bg);color:var(--ink);
       <!-- 红心 -->
       <div class="sec acc entry" id="favSec" data-mod="fav">
         <div class="acc-head" data-select="fav">
-          <span class="ico" id="icoHeart"></span><span class="sec-title">红心</span>
+          <span class="ico" id="icoHeart"></span><span class="sec-title">红心</span><span class="fav-count" id="favCount">(0)</span>
         </div>
       </div>
     </div>
@@ -295,7 +299,7 @@ var YEAR_MIN=1927,YEAR_MAX=2025;
 /* ===== 状态 ===== */
 var state={
   mode:'list',                        // 当前选中内容(全局唯一)：list/award/fav
-  open:{list:true, award:false},      // 展开状态(可多开,独立于mode)；红心无展开
+  open:{list:true, award:true},      // 展开状态(可多开,独立于mode)；红心无展开
   awards:['cannes'],                  // 奖项默认选戛纳(进奖项时生效)
   yearRange:[2020,2025],              // 默认最近5年
   list:'cc',
@@ -395,8 +399,12 @@ function render(){
   // A24 默认按票房排名(rank)；其余按年份
   if(isA24){
     arr.sort(function(a,b){return state.sort==='new'?a.rank-b.rank:b.rank-a.rank;});
+    document.getElementById('sNew').textContent='从高到低';
+    document.getElementById('sOld').textContent='从低到高';
   }else{
     arr.sort(function(a,b){return state.sort==='new'?b.year-a.year:a.year-b.year;});
+    document.getElementById('sNew').textContent='最新';
+    document.getElementById('sOld').textContent='最早';
   }
 
   // 海报框比例：CC榜单4:5 / A24和奖项2:3 / 红心2:3
@@ -427,6 +435,7 @@ function render(){
   // - 奖项单选：不显示(全是同一个奖，重复废话)
   // - 奖项多选(交集)：显示(让观众分清每部到底得了哪几个奖)
   var showTags = (state.mode!=='award') || (state.awards.length>1);
+  document.getElementById('favCount').textContent='('+Object.keys(state.favs).length+')';
 
   // 网格
   grid.innerHTML=arr.map(function(f){
@@ -436,11 +445,11 @@ function render(){
     var tags=(showTags&&f.awardKeys&&f.awardKeys.length)?
       '<div class="card-tags">'+f.awardKeys.map(function(k){return '<span class="mini-tag '+k+'">'+AWNAME[k]+'</span>';}).join('')+'</div>':'';
     // A24：排名角标 + 票房
-    var rankBadge=isA24?'<div class="rank-badge'+(f.is_new?' is-new':'')+'">'+f.rank+'</div>':'';
-    var boxLine=isA24?'<div class="card-box">'+f.box+'</div>':'';
-    return '<div class="card"><div class="poster">'+rankBadge+p+heart+'</div>'+
+    var rankBadge=isA24?'<div class="rank-badge'+(f.rank<=3?' is-new':'')+'">'+f.rank+'</div>':'';
+    var a24Head=isA24?'<div class="a24-head">'+rankBadge+'<span class="a24-box">'+f.box+'</span></div>':'';
+    return '<div class="card">'+a24Head+'<div class="poster">'+p+heart+'</div>'+
       '<div class="card-title">'+f.title+(f.year?'<span class="yr">'+f.year+'</span>':'')+'</div>'+
-      '<div class="card-dir">'+f.dir+'</div>'+boxLine+tags+'</div>';
+      '<div class="card-dir">'+f.dir+'</div>'+tags+'</div>';
   }).join('');
 }
 
@@ -551,6 +560,7 @@ grid.addEventListener('click',function(e){
   var faved=!!state.favs[title];
   h.classList.toggle('faved',faved);
   h.innerHTML=faved?HEART_FAV:HEART_UNFAV;
+  document.getElementById('favCount').textContent='('+Object.keys(state.favs).length+')';
 });
 
 /* ===== 年份双滑块 ===== */
