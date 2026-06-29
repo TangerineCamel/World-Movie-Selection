@@ -5,16 +5,44 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WMS · 世界电影大赏</title>
 <style>
+/* ===== 本地字体 ===== */
+@font-face{
+  font-family:'Space Grotesk';
+  src:url('assets/fonts/space-grotesk_5.2.10/webfonts/space-grotesk-latin-500-normal.woff2') format('woff2'),
+      url('assets/fonts/space-grotesk_5.2.10/ttf/space-grotesk-latin-500-normal.ttf') format('truetype');
+  font-weight:500;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Space Grotesk';
+  src:url('assets/fonts/space-grotesk_5.2.10/webfonts/space-grotesk-latin-700-normal.woff2') format('woff2'),
+      url('assets/fonts/space-grotesk_5.2.10/ttf/space-grotesk-latin-700-normal.ttf') format('truetype');
+  font-weight:700;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Space Mono';
+  src:url('assets/fonts/space-mono_5.2.9/webfonts/space-mono-latin-400-normal.woff2') format('woff2');
+  font-weight:400;font-style:normal;font-display:swap;
+}
+@font-face{
+  font-family:'Space Mono';
+  src:url('assets/fonts/space-mono_5.2.9/webfonts/space-mono-latin-700-normal.woff2') format('woff2');
+  font-weight:700;font-style:normal;font-display:swap;
+}
+
 :root{
-  --panel-bg:#FFEFD7;        /* 左栏背景 */
-  --wall-bg:#FFF5E7;         /* 海报墙背景 */
-  --logo:#3B2600;            /* logo / 标题后半 */
-  --line-strong:#000000;     /* 左右分割线 / logo下线 / 筛选器边框文字 */
-  --ink:#000000;             /* 筛选器内 & 片名 */
-  --yearbar-base:#DBCFBC;    /* 年份bar底线 / 海报分割线 */
+  --panel-bg:#EF8751;
+  --wall-bg:#F7F2E0;
+  --logo-zone:#9F9989;
+  --logo:#020202;
+  --line-strong:#000000;
+  --ink:#020202;
+  --yearbar-base:#DBCFBC;
   --grid-line:#DBCFBC;
-  --title-front:#FF6F2E;     /* 海报墙标题前半 */
-  --meta:#C2B5A1;            /* 年份+导演 */
+  --title-front:#EF8751;
+  --meta:#CBC7BE;
+  --rank-orange:#EF8751;
+  --rank-gray:#9F9989;
+  --rank-bar-bg:#CBC7BE;
   --tag-oscar:#AB8C73;
   --tag-cannes:#79AB73;
   --tag-goldenhorse:#7395AB;
@@ -24,16 +52,18 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
 body{background:var(--wall-bg);color:var(--ink);
-  font-family:"PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+  font-family:"Space Grotesk","PingFang SC","Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
 .app{display:flex;min-height:100vh;}
 
 /* ============ 左栏筛选器 ============ */
 .panel{width:380px;flex-shrink:0;background:var(--panel-bg);
-  border-right:1px solid var(--line-strong);position:sticky;top:0;height:100vh;overflow-y:auto;}
+  position:sticky;top:0;height:100vh;overflow-y:auto;}
 .panel-inner{padding:0;}
-/* logo 区：上左边距32，下方横线距logo 32 */
-.logo-wrap{padding:32px 0 32px 32px;border-bottom:1px solid var(--line-strong);}
-.logo-wrap svg{height:76px;width:auto;display:block;}
+/* logo 区：灰底，logo 在背景正中央 */
+.logo-wrap{background:var(--logo-zone);height:202px;
+  display:flex;align-items:center;justify-content:center;}
+.logo-wrap img{width:196px;height:auto;display:block;}
+.logo-wrap svg{width:196px;height:auto;display:block;}
 
 /* ---- 手风琴 ---- */
 .sec.acc{padding:0 32px;}
@@ -82,24 +112,34 @@ body{background:var(--wall-bg);color:var(--ink);
 .slider .handle{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;
   background:var(--ink);border:1.5px solid var(--panel-bg);transform:translate(-50%,-50%);cursor:pointer;z-index:2;}
 .year-block.disabled{opacity:.4;pointer-events:none;}
+.year-sel{
+  font-size:18px;font-weight:600;
+  color:var(--ink);background:transparent;
+  border:1.5px solid var(--ink);border-radius:6px;
+  padding:2px 10px;margin-left:8px;
+  cursor:pointer;vertical-align:middle;
+  font-family:inherit;
+}
+.year-sel:focus{outline:none;border-color:var(--title-front);}
 
 /* ============ 右侧海报墙 ============ */
 .browse{flex:1;min-width:0;background:var(--wall-bg);}
 /* 顶部：海报墙顶与logo下线对齐 → 高度与logo区等高(32+76+32=140)。标题垂直居中，去掉下方横线 */
-.wall-head{padding:0 44px;}
+.wall-head{padding:0 66px;}
 .wall-head-inner{display:flex;align-items:center;
-  height:140px;}
+  height:202px;}
 .wall-title-wrap{display:flex;flex-direction:column;gap:8px;}
-.wall-title{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;font-size:34px;line-height:1.1;}
-.wall-title .front{color:var(--title-front);}
-.wall-title .back{color:var(--logo);}
+/* C版标题色块：[品类 灰块][详情 米灰块] 拼接 */
+.wall-title{display:inline-flex;align-items:stretch;height:56px;}
+.title-cat{display:flex;align-items:center;padding:0 20px;background:var(--logo-zone);
+  font-family:"Space Grotesk","PingFang SC",sans-serif;font-weight:500;font-size:45px;
+  color:var(--ink);line-height:1;}
+.title-detail{display:flex;align-items:center;gap:32px;padding:0 20px;background:var(--rank-bar-bg);
+  font-size:20px;color:var(--ink);font-weight:400;}
+.title-detail .num{font-family:"Space Mono",monospace;}
+/* 电影手册年份选择器嵌在详情块里 */
+.title-detail .year-sel{margin-left:0;}
 .wall-sub{font-size:16px;color:var(--meta);font-variant-numeric:tabular-nums;}
-/* 排序器：在海报上方16px、与海报墙右对齐 */
-.sort-row{display:flex;justify-content:flex-end;padding:0 44px;margin-bottom:16px;}
-.sorter{display:flex;gap:0;}
-.sortbtn{width:77px;height:36px;border:1px solid var(--ink);background:transparent;color:var(--ink);
-  font-size:13px;font-family:inherit;cursor:pointer;margin-left:-1px;}
-.sortbtn.on{background:var(--ink);color:var(--wall-bg);}
 
 /* 工具组距logo下线40 → 这里指海报网格距标题区。用padding-top实现 */
 .grid{display:grid;grid-template-columns:repeat(5,1fr);padding:0 44px 80px;}
@@ -107,37 +147,45 @@ body{background:var(--wall-bg);color:var(--ink);
 .card{border-right:1px solid var(--grid-line);border-bottom:1px solid var(--grid-line);
   padding:21px 22px 24px;position:relative;display:flex;flex-direction:column;}
 .card:nth-child(5n){border-right:none;}   /* 第5列右侧无线 */
+.grid .card:nth-last-child(-n+5){border-bottom:none;}   /* 最后一行去掉底边线 */
+.grid .card:nth-child(-n+5){padding-top:0;}   /* 第一行顶部无 padding，banner 贴红线 */
 /* 海报框：固定比例(由grid的ratio类决定)，图片contain居中，留白=海报墙底色 */
+.poster-wrap{width:100%;line-height:0;}
+.poster-wrap .rank-banner{margin:0;}
+.poster-wrap .poster{margin:0;}
 .poster{position:relative;width:100%;aspect-ratio:2/3;background:var(--wall-bg);
   overflow:hidden;line-height:0;}
 .grid.ratio-cc .poster{aspect-ratio:4/5;}     /* 榜单(CC)：4:5 */
 .grid.ratio-award .poster{aspect-ratio:2/3;}  /* 奖项：2:3 */
 .grid.ratio-fav .poster{aspect-ratio:2/3;}    /* 红心跨池：2:3 */
-.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;}
+.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
 /* 红心模式：图片顶边对齐(短海报贴顶、下方留白)，框仍2:3固定→片名/导演保持对齐 */
 .grid.ratio-fav .poster img{object-position:top;}
 .poster .ph{position:absolute;inset:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
   color:var(--meta);font-size:12px;text-align:center;padding:10px;background:#ece4d4;line-height:1.3;}
 /* 红心：21x21，右上角距上右各8。未交互不显示；hover显空心；已收藏显实心 */
-.heart{position:absolute;top:8px;right:8px;width:21px;height:21px;cursor:pointer;
-  opacity:0;transition:opacity .15s;z-index:2;}
+.heart{width:21px;height:21px;cursor:pointer;flex-shrink:0;margin-left:auto;
+  opacity:0;transition:opacity .15s;}
 .card:hover .heart{opacity:1;}
 .heart.faved{opacity:1;}
 .heart svg{width:100%;height:100%;display:block;}
 
-.card-title{font-size:16px;font-weight:500;color:var(--ink);margin-top:12px;line-height:1.3;}
-.card-title .yr{color:var(--meta);font-weight:400;font-size:14px;margin-left:6px;}
+.card-title{font-size:16px;font-weight:500;color:var(--ink);margin-top:12px;line-height:1.3;
+  display:flex;align-items:center;gap:6px;}
+.card-title .t-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+.card-title .yr{color:var(--meta);font-weight:400;font-size:14px;flex-shrink:0;margin-left:0;}
 .card-dir{font-size:14px;font-weight:400;color:var(--meta);margin-top:4px;}
-/* A24 票房行 */
-.card-box{font-size:14px;font-weight:600;color:var(--title-front);font-variant-numeric:tabular-nums;}
-/* A24 海报上方一行：排名角标 + 票房 */
-.a24-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.rank-badge{flex-shrink:0;min-width:30px;height:26px;
-  display:flex;align-items:center;justify-content:center;padding:0 7px;
-  background:var(--ink);color:var(--panel-bg);font-size:16px;font-weight:700;
-  font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1;}
-.rank-badge.is-new{background:var(--title-front);}
-.a24-box{font-size:14px;font-weight:600;color:var(--title-front);font-variant-numeric:tabular-nums;}
+/* C版排名标横幅：[NO.x色块][票房+奖项图标 米灰条] 横跨海报顶 */
+.rank-banner{display:flex;align-items:stretch;height:24px;margin-bottom:0;width:100%;}
+.rank-no{flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  padding:0 12px;background:var(--rank-gray);color:var(--ink);
+  font-size:15px;font-weight:500;font-family:"Space Grotesk",sans-serif;line-height:1;letter-spacing:.02em;}
+.rank-no.is-new{background:var(--rank-orange);}
+.rank-bar{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;
+  background:var(--rank-bar-bg);padding:0 8px;gap:8px;}
+.rank-rev{font-size:10px;color:var(--ink);font-family:"Space Mono",monospace;white-space:nowrap;}
+.rank-icons{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.rank-icons svg{display:block;height:14px;width:auto;}
 /* 奖项小角标：距导演12，角标间4，9号字Bold，1px框，hug pad4 */
 .card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px;}
 .mini-tag{font-size:9px;font-weight:700;padding:4px;border:1px solid;line-height:1;}
@@ -173,9 +221,9 @@ body{background:var(--wall-bg);color:var(--ink);
         </div>
         <div class="acc-body">
           <div class="tag-grid">
-            <button class="tag" data-list="cc">CC 年度畅销榜</button>
             <button class="tag" data-list="a24">A24 年度票房榜</button>
-            <button class="tag" data-list="cahiers" data-empty="1">电影手册年度十佳</button>
+            <button class="tag" data-list="cc">CC 年度畅销榜</button>
+            <button class="tag" data-list="cahiers">电影手册年度十佳</button>
             <button class="tag" data-list="sightsound" data-empty="1">视与听年度十佳</button>
           </div>
           <div class="sub-label">媒体</div>
@@ -236,12 +284,6 @@ body{background:var(--wall-bg);color:var(--ink);
         </div>
       </div>
     </div>
-    <div class="sort-row">
-      <div class="sorter">
-        <button class="sortbtn on" id="sNew">最新</button>
-        <button class="sortbtn" id="sOld">最早</button>
-      </div>
-    </div>
     <div class="grid" id="grid"></div>
   </main>
 </div>
@@ -249,24 +291,14 @@ body{background:var(--wall-bg);color:var(--ink);
 <script src="data/movies.js"></script>
 <script src="data/cc_list.js"></script>
 <script src="data/a24_list.js"></script>
+<script src="data/cahiers_list.js"></script>
 <script>
-/* ===== SVG 资源 ===== */
-var LOGO_SVG = `<svg width="805" height="466" viewBox="0 0 805 466" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M300.347 35.1131H324.952V63.2322H300.347V35.1131ZM320.585 53.6688V44.8192H304.714V53.6688H320.585ZM310.302 0H314.998V16.1292H319.646C320.632 11.2762 321.478 6.2804 322.229 0.856415L326.549 5.42398C325.938 9.42059 325.281 12.989 324.53 16.1292H332.606V46.1038H328.192V27.8336H297.107V46.2465H292.646V16.1292H301.005C300.3 12.4181 299.502 8.99239 298.657 5.85219L302.883 1.14189C303.916 5.28124 304.855 10.277 305.7 16.1292H310.302V0ZM327.723 69.3698V108.908H323.309V81.3597H302.038V110.478H297.624V69.3698H327.723ZM315.702 107.052C321.9 110.906 327.488 115.616 332.559 121.326L330.024 133.173C324.624 126.322 319.083 121.04 313.448 117.329L315.702 107.052ZM310.678 85.7845L315.138 86.9264C314.481 103.198 313.119 113.904 310.959 119.185C308.612 126.036 303.118 130.318 294.431 132.317L292.646 120.041C299.972 119.185 304.761 116.187 307.062 111.049C309.128 106.196 310.302 97.7743 310.678 85.7845Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M244.939 36.5431H262.923C263.205 28.9781 263.393 20.9849 263.44 12.7061V0.288086H267.948V9.56595C267.948 18.9865 267.76 27.9789 267.384 36.5431H286.448V49.6748H268.511C271.798 80.2204 278.137 103.772 287.435 120.472L284.664 131.463C275.649 114.62 269.31 91.0684 265.741 60.8083C262.642 93.4949 256.303 117.475 246.771 132.747L243.906 121.328C253.579 107.055 259.683 83.0751 262.172 49.6748H244.939V36.5431Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M199.796 4.27982H220.551V44.246H211.629L212.192 51.3828H222.711V61.8025H197.354V51.3828H208.013L207.45 44.246H199.796V4.27982ZM216.512 35.3963V28.545H203.787V35.3963H216.512ZM203.787 20.5518H216.512V13.4149H203.787V20.5518ZM200.172 68.5111H220.269V97.4866H212.333V118.612C212.333 126.319 210.972 130.173 208.342 130.173H205.055L204.163 118.326C205.149 118.897 206.088 119.183 206.98 119.183C207.685 119.183 208.06 117.898 208.06 115.614V97.4866H200.172V68.5111ZM216.184 88.066V77.6463H204.257V88.066H216.184ZM201.111 100.484L204.445 105.337C203.224 114.472 201.768 122.465 200.078 129.317L196.885 122.323C198.528 116.185 199.937 108.905 201.111 100.484ZM217.498 100.77C219.189 107.906 220.457 114.329 221.349 119.753L218.203 126.462C217.264 120.467 216.043 113.759 214.446 106.479L217.498 100.77ZM235.577 0.283203L238.3 9.70379C234.544 21.2654 229.895 30.8288 224.354 38.3938L222.523 26.8321C227.829 19.9808 232.196 11.1312 235.577 0.283203ZM236.844 37.8228L239.568 47.2434C235.671 60.5179 230.928 71.5086 225.293 80.0728L223.462 68.6539C228.909 60.8034 233.37 50.5264 236.844 37.8228ZM237.267 74.6488L240.695 82.4993C236.844 105.052 231.069 121.324 223.462 131.172L221.678 118.754C228.58 109.762 233.792 95.0601 237.267 74.6488Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M158.387 61.5193V79.3614H168.811V61.5193H158.387ZM168.811 92.0649H158.387V103.341H153.926V18.413H168.811V0H173.272V18.413H188.439V92.0649H173.272V106.481C173.272 113.19 174.258 116.616 176.23 116.616H186.466C187.405 116.616 188.157 115.759 188.626 114.332C189.002 112.904 189.284 107.623 189.425 98.7735L193.698 103.198C193.416 115.474 192.852 122.896 192.007 125.608C191.115 128.034 189.519 129.319 187.218 129.319H175.197C170.924 129.319 168.811 122.325 168.811 108.48V92.0649ZM173.272 79.3614H184.025V61.5193H173.272V79.3614ZM184.025 49.1013V31.2592H173.272V49.1013H184.025ZM168.811 31.2592H158.387V49.1013H168.811V31.2592Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M108.41 4.42383H141.467V63.5167H133.109C136.114 73.08 140.669 80.7877 146.773 86.4972L144.848 98.487C140.716 93.634 137.241 88.0673 134.424 81.7869V131.745H129.916V77.2193H132.499C130.808 72.7945 129.446 68.227 128.319 63.5167H121.37C120.102 68.3697 118.646 72.9373 116.956 77.0766H120.525C120.525 88.4955 119.961 98.3443 118.834 106.338C117.473 116.615 114.28 125.036 109.255 131.887L106.297 121.039C110.429 115.901 113.153 109.478 114.467 101.913C115.407 96.0605 115.923 88.4955 116.017 79.3604C113.012 86.069 109.443 92.0639 105.217 97.2024L102.822 85.3553C108.927 79.5031 113.481 72.2236 116.486 63.5167H108.41V4.42383ZM137.194 51.6695V39.3942H127.005V51.6695H137.194ZM122.685 51.6695V39.3942H112.683V51.6695H122.685ZM112.683 28.2608H122.685V16.4137H112.683V28.2608ZM127.005 16.4137V28.2608H137.194V16.4137H127.005Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M56.582 32.5427H62.2168V1.42623H66.7715V32.5427H75.2236V0.141602H79.5905V32.5427H88.0896V0.141602H92.4565V32.5427H99.1712V45.5317H92.4565V90.4937H75.2236V45.5317H66.7715V112.332H97.5747V126.178H62.2168V45.5317H56.582V32.5427ZM79.5905 45.5317V77.3619H88.0896V45.5317H79.5905Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M302.575 413.579C307.688 413.579 311.838 411.928 315.028 408.628C321.078 402.302 324.103 390.544 324.103 373.354C324.103 363.315 322.602 355.545 319.601 350.044C316.599 344.681 311.885 339.937 305.46 335.811L294.485 328.591C283.697 321.44 276.24 313.67 272.112 305.282C265.124 291.255 261.63 269.32 261.63 239.478C261.63 212.25 265.007 189.628 271.761 171.612C278.515 153.597 288.434 144.59 301.52 144.59C312.448 144.59 321.758 153.116 329.45 170.169C337.189 187.083 341.246 211.699 341.621 244.017H320.797C320.421 225.727 317.701 212.731 312.636 205.03C309.259 199.942 305.061 197.397 300.043 197.397C294.461 197.397 290.006 200.698 286.676 207.299C283.345 213.9 281.68 223.114 281.68 234.94C281.68 245.804 283.322 253.918 286.605 259.281C288.716 262.857 293.218 267.051 300.113 271.864L317.983 284.447C325.815 289.948 331.725 297.306 335.711 306.519C341.903 320.821 344.998 341.518 344.998 368.61C344.998 396.389 341.363 419.492 334.093 437.92C326.87 456.21 316.646 465.355 303.419 465.355C289.912 465.355 279.288 456.347 271.55 438.332C263.811 420.179 259.941 395.288 259.941 363.659H280.625C281.282 377.548 282.572 387.931 284.495 394.807C288.012 407.321 294.039 413.579 302.575 413.579Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M164.762 457.518H144.57V153.462H176.088L194.943 392.54L213.657 153.462H244.823V457.518H224.632V251.857C224.632 245.944 224.655 237.693 224.702 227.104C224.749 216.377 224.773 208.126 224.773 202.35L205.144 457.518H184.109L164.621 202.35C164.621 208.126 164.644 216.377 164.691 227.104C164.738 237.693 164.762 245.944 164.762 251.857V457.518Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path d="M109.75 153.462H131.771L102.574 457.518H81.8907L69.3679 279.705L65.7096 220.915L62.0512 279.705L49.5284 457.518H29.4075L0 153.462H23.0054L36.7242 327.562L39.679 376.038L42.7042 328.593L54.3828 153.462H77.2475L89.5592 327.562L92.7251 376.038L95.891 329.418L109.75 153.462Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2314 0.1490 0.0000);fill-opacity:1;"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M698.696 249.881V299.676C699.275 305.364 703.563 315.628 716.069 311.171L780.684 288.88L805 306.991V396.141L780.684 414.247L716.069 391.962C710.279 390.917 698.696 391.614 698.696 402.757V444.198L679.243 463.7H404.106L385 445.589V249.881L404.106 230.726H412.446C420.367 229.391 424.035 227.622 427.021 224.745C431.575 220.355 432.566 214.678 429.79 208.885C429.527 208.335 428.865 207.294 427.979 206.014C426.828 204.355 425.3 202.284 423.774 200.35C410.212 183.149 407.193 164.995 414.785 146.293C417.514 139.571 420.984 134.494 426.616 128.988C436.016 119.8 443.575 116.721 459.575 115.565C477.122 114.299 483.923 116.593 498.198 128.592C502.587 132.28 507.651 136.061 509.453 136.991C518.05 141.423 526.349 136.804 529.541 125.809C536.049 103.397 540.059 95.9276 552.295 83.4313C562.521 72.9863 571.728 67.1306 583.994 63.2701C589.86 61.4239 598.791 59.4943 603.447 59.0709L604.819 58.944L604.956 58.9342C605.544 58.8792 606.093 58.8256 606.528 58.7828L606.929 58.7438L607.271 58.7047C607.747 58.6551 610.052 58.8292 612.764 59.11C613.349 59.1708 613.955 59.236 614.565 59.3053C642.654 62.5043 664.012 76.6263 677.974 101.224C688.223 119.279 690.488 143.139 683.784 162.494C681.835 168.122 675.708 179.838 672.275 184.51C670.669 186.693 665.378 192.63 660.513 197.704C655.646 202.779 651.214 208.02 650.659 209.349C648.107 215.475 650.496 222.783 656.099 225.985C659.598 227.985 660.693 228.261 668.74 229.178C671.143 229.452 677.746 230.2 679.59 230.726L698.696 249.881ZM551.055 230.726C552.438 230.493 554.092 229.785 555.464 229.247C562.689 226.411 567.699 219.927 567.651 213.47C567.624 209.909 565.222 205.908 560.977 202.347C553.976 196.478 546.655 188.758 541.094 181.38C537.48 176.587 534.74 173.692 532.651 172.464C528.468 170.007 525.573 169.688 522.119 171.302C518.096 173.182 514.973 177.202 509.99 186.918C507.591 191.595 503.635 198.04 501.196 201.244C498.76 204.445 496.334 207.906 495.801 208.939C492.197 215.924 495.057 223.781 502.524 227.401C506.015 229.092 510.367 230.3 519.79 230.726H551.055Z" fill="#3B2600" style="fill:#3B2600;fill:color(display-p3 0.2298 0.1499 0.0000);fill-opacity:1;"/>
-</svg>`;
+var ICO_OSCAR = `<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 15H10.5479L10.0798 13.8722H9.53856C9.52394 13.796 9.46543 13.6436 9.07048 13.6284C8.95346 13.6284 8.73112 13.5644 8.77793 13.2474C8.83644 12.8511 8.96618 12.0891 8.89495 11.6624C8.84916 11.388 9.05585 11.2509 9.05585 10.7175C9.05585 10.5112 9.01746 10.2503 8.98497 10.1103C8.97697 10.0758 8.99667 10.0406 9.02874 10.0285C9.11193 9.99731 9.17113 9.938 9.23138 9.72685C9.28502 9.53888 9.38936 9.10809 9.37766 8.88863C9.36303 8.6143 9.23138 8.47714 9.07048 8.44666C8.90957 8.41618 8.74867 8.26377 8.74867 8.17233C8.74867 8.08089 8.85106 8.03517 8.85106 7.73036C8.85106 7.42556 8.69016 7.30363 8.51463 7.30363C8.3391 7.30363 8.17819 7.42556 8.17819 7.73036C8.17819 8.03517 8.28058 8.08089 8.28058 8.17233C8.28058 8.26377 8.11968 8.41618 7.95878 8.44666C7.79787 8.47714 7.66622 8.6143 7.6516 8.88863C7.63989 9.10809 7.74424 9.53888 7.79787 9.72685C7.85812 9.938 7.91733 9.99731 8.00052 10.0285C8.03258 10.0406 8.05229 10.0758 8.04429 10.1103C8.01179 10.2503 7.9734 10.5112 7.9734 10.7175C7.9734 11.2509 8.1801 11.388 8.13431 11.6624C8.06308 12.0891 8.19282 12.8511 8.25133 13.2474C8.29814 13.5644 8.0758 13.6284 7.95878 13.6284C7.56383 13.6436 7.50532 13.796 7.49069 13.8722H6.94947L6.48138 15H3L8.5 2L14 15Z" fill="black"/></svg>`;
+var ICO_CANNES = `<svg width="30" height="17" viewBox="0 0 30 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.2653 1.60712C10.3347 1.72137 6.68632 2.79692 4.39573 4.51666C4.06706 4.76342 3.8585 4.94148 3.58934 5.20516C3.08313 5.70105 2.76173 6.11927 2.47284 6.65793C2.12403 7.30833 1.95073 8.11094 2.01221 8.79126C2.13681 10.1702 2.95004 11.4264 4.43108 12.5276C6.76212 14.261 10.4956 15.3272 14.4842 15.3986C15.6179 15.4189 16.6306 15.3755 17.6598 15.2623C22.4731 14.733 26.3507 12.7701 27.5857 10.2375C28.0847 9.21433 28.134 8.12312 27.7279 7.09069C27.272 5.9317 26.2341 4.83426 24.7526 3.94453C24.4231 3.74666 24.251 3.65234 23.8916 3.4727C21.2862 2.1704 17.8431 1.50312 14.2653 1.60712ZM16.2212 1.91254C17.183 1.97478 17.9429 2.06611 18.7921 2.22152C20.9109 2.60926 22.8629 3.33259 24.3642 4.28634C25.3823 4.9331 26.1852 5.69834 26.681 6.49433C27.8245 8.33 27.3509 10.3018 25.3704 11.9515C23.6616 13.3749 21.0029 14.4173 17.9933 14.8436C14.7082 15.309 11.1807 14.9874 8.28919 13.9588C5.33833 12.909 3.34169 11.2675 2.81668 9.4596C2.65343 8.89739 2.63499 8.29063 2.76458 7.74487C2.8977 7.18421 3.14392 6.6765 3.53611 6.15397C4.9846 4.22408 8.11866 2.69682 11.8073 2.12337C12.5427 2.00902 13.3173 1.93231 14.1221 1.89408C14.4951 1.87638 15.8458 1.88825 16.2212 1.91254ZM8.28265 4.61622C8.16204 4.66563 8.20071 4.92068 8.34738 5.26736C8.42499 5.45077 8.52504 5.62389 8.72748 5.925C8.82184 6.06537 8.94223 6.24795 8.995 6.33073C9.1814 6.62316 9.41305 6.91541 9.84566 7.40394C10.0797 7.66822 10.2379 7.80968 10.2248 7.84894C10.2117 7.88821 10.0306 7.91792 9.70164 7.99977C8.17225 8.38033 6.99964 8.75174 6.59583 8.98351C6.23305 9.19174 6.02464 9.39311 5.8965 9.6592C5.79052 9.87928 5.73521 10.1722 5.76379 10.3622C5.79345 10.5594 5.92163 10.7451 6.08191 10.8232C6.21119 10.8861 6.39946 10.8969 6.52361 10.8484C6.59378 10.821 6.67228 10.7479 6.84507 10.549C7.07209 10.2878 7.55422 9.80571 7.75951 9.63465C8.20397 9.26433 8.50715 9.06985 9.0935 8.77896C9.44018 8.60698 9.74295 8.50329 9.89782 8.50348C10.0875 8.50372 10.045 8.51004 10.3752 8.87635C10.5527 9.08185 10.7465 9.25423 11.0422 9.49284C11.5246 9.88213 11.9743 10.1235 12.4426 10.2443C12.6244 10.2912 12.8247 10.3476 12.8731 10.3095C12.9499 10.2491 12.7888 10.0963 12.6052 9.90121C12.2625 9.5371 11.8436 9.24362 11.2098 8.92358C10.8952 8.76476 10.6302 8.5426 10.6302 8.5426C10.6302 8.5426 10.5016 8.4178 10.5321 8.379C10.5686 8.33253 10.7505 8.29792 10.9415 8.26485C11.0812 8.24065 11.1585 8.23602 11.428 8.23564C11.9007 8.23498 12.0266 8.26247 12.1451 8.39216C12.1795 8.42989 12.2333 8.5042 12.2646 8.5573C12.6864 9.27291 13.1121 9.90069 13.4529 10.3095C13.7124 10.6207 14.3401 11.2046 14.4687 11.2584C14.6328 11.327 14.5863 11.1247 14.4961 10.9075C14.365 10.5915 14.142 10.1691 13.9594 9.89092C13.7514 9.5741 13.6433 9.44881 13.174 8.98104C12.904 8.71188 12.7189 8.51716 12.7056 8.48826C12.6786 8.42996 12.6775 8.38268 12.702 8.33534C12.7397 8.26231 12.7502 8.26096 13.2603 8.26373C13.5663 8.26538 13.7474 8.2715 13.7843 8.28143C13.9109 8.31555 13.9525 8.3798 13.9841 8.59002C14.0442 8.99083 14.1447 9.29198 14.3661 9.73501C14.5052 10.0133 15.1054 11.061 15.1749 11.134C15.2886 11.2533 15.3216 11.134 15.2933 10.8482C15.2523 10.4342 15.1267 9.91192 14.9764 9.53073C14.8435 9.19368 14.7192 8.96859 14.5111 8.68768C14.4609 8.61993 14.4117 8.54502 14.4017 8.52123C14.1544 8.22849 14.3902 8.34628 14.4752 8.3332C14.5702 8.3332 14.6341 8.42598 14.7568 8.64729C15.0887 9.24607 15.6364 9.87366 16.1961 10.2965C16.3735 10.4306 16.5775 10.5846 16.6331 10.5843C16.6924 10.5841 16.6658 10.46 16.6658 10.46C16.6658 10.46 16.5481 10.0346 16.2118 9.68779C16.1441 9.6086 15.9831 9.444 15.8541 9.32199C15.7251 9.19999 15.5307 9.01152 15.4221 8.90318C15.1707 8.65254 15.0376 8.47719 15.0638 8.45099C15.0899 8.42478 15.2456 8.46406 15.3034 8.46406C15.3923 8.46406 15.6009 8.51628 15.6875 8.56021C15.7936 8.61401 15.8284 8.65187 15.9747 8.8728C16.2586 9.30159 16.5301 9.60291 17.1033 10.1256C17.2868 10.2929 17.4309 10.4104 17.5326 10.4758C17.6365 10.5425 17.8001 10.6212 17.8654 10.6358C18.2156 10.7676 18.1437 10.6358 18.0158 10.3945C17.9249 10.2115 17.6835 9.93117 17.4446 9.73098C17.3759 9.67345 17.1579 9.50691 16.9601 9.36085C16.5253 9.03982 16.3856 8.93573 16.3454 8.85671C16.195 8.64731 16.2539 8.68657 16.4591 8.67682C16.5285 8.68657 17.0716 8.74178 17.1759 8.77156C17.295 8.80555 17.3448 8.85094 17.6008 9.15867C18.2747 9.96868 18.7586 10.4072 19.1529 10.5651C19.3931 10.6613 19.6252 10.6535 19.6252 10.5123C19.6252 10.3693 19.3488 10.1547 18.5217 9.56057C18.0665 9.23363 17.9301 9.11705 17.8861 9.01755C17.8647 8.96918 17.8629 8.95286 17.8754 8.9227C17.8836 8.90267 17.905 8.87962 17.9229 8.87149C17.9673 8.85123 18.111 8.85314 18.3137 8.87669C18.9498 8.95057 19.0388 9.00132 19.6252 9.62464C19.848 9.8614 20.0056 9.9997 20.1924 10.1222C20.4566 10.2955 20.8183 10.4409 21.1597 10.5111C21.3493 10.5501 21.5375 10.5915 21.6399 10.5385C21.7102 10.5021 21.5169 10.3927 21.4133 10.307C21.3573 10.2607 21.055 10.05 20.4978 9.66883C20.0353 9.32134 19.6492 9.11519 19.6252 9.04649C19.6019 9.01377 19.9688 9.06823 20.2973 9.12423C20.4004 9.1418 20.523 9.16817 20.5697 9.18281C20.6165 9.19746 20.846 9.30589 21.0798 9.42376C21.5238 9.64766 21.7473 9.74262 21.9887 9.80996C22.3269 9.90431 22.612 9.9369 23.0023 9.92586C23.3731 9.91536 23.545 9.8968 23.545 9.77941C23.545 9.71963 23.3915 9.6564 23.2874 9.61037C23.1277 9.5398 22.5434 9.32737 22.4007 9.28799C22.2358 9.24249 21.9473 9.19747 21.9037 9.15774C21.8601 9.118 22.1663 9.06136 22.4661 8.96657C23.4335 8.66062 23.8626 8.49986 24.2316 8.30497C24.4041 8.21389 24.7096 8.00821 24.7844 7.93273C24.8536 7.86299 24.9715 7.73941 24.951 7.68534C24.9106 7.57903 24.6762 7.65506 23.9178 7.88161C23.4528 8.0205 23.0873 8.09761 23.0873 8.09761C23.0873 8.09761 22.8192 8.15978 22.7996 8.13033C22.78 8.10088 23.0737 7.8262 23.6824 7.32278C24.0913 6.98461 24.3287 6.77491 24.3823 6.70455C24.4471 6.61961 24.5235 6.47188 24.454 6.4359C24.3617 6.38816 24.14 6.46637 23.7418 6.67918C22.9778 7.08739 22.2879 7.55571 21.8179 8.02513C21.6882 8.15463 21.6483 8.23352 21.5331 8.40793C21.4231 8.57441 21.374 8.63617 21.305 8.69478C21.1411 8.83402 20.9953 8.87649 20.752 8.8559C20.2297 8.81173 20.3605 8.77164 20.452 8.69478C20.5436 8.61791 20.558 8.59588 20.6629 8.48851C21.0791 8.06249 21.5648 7.46591 21.8549 7.02439C22.0806 6.68083 22.1706 6.4342 22.0803 6.34383C22.0343 6.29778 21.9085 6.38465 21.8002 6.4359C21.6563 6.50403 21.4479 6.63641 21.2236 6.80222C20.9933 6.97252 20.6984 7.25998 20.6482 7.25998C20.5992 7.25998 20.8012 7.01739 20.8313 6.84771C20.8463 6.76283 20.8589 6.66113 20.8313 6.63176C20.7597 6.55554 20.6043 6.63559 20.2979 6.78262C19.9808 6.93479 19.6913 7.11742 19.3029 7.41033C18.8198 7.77454 18.5923 7.98165 18.4124 8.22109C18.271 8.40933 18.1919 8.48024 18.0889 8.51127C17.9512 8.55276 17.3807 8.49428 17.3132 8.43135C17.2736 8.39439 17.4616 8.34855 17.5061 8.2974C17.5259 8.27465 17.6127 8.2078 17.699 8.14884C18.0619 7.90093 18.4424 7.59371 19.0234 7.0795C19.2 6.92322 19.3641 6.77872 19.3882 6.75839C19.4434 6.71176 19.5888 6.58674 19.5888 6.54015C19.5888 6.48425 19.5142 6.45056 19.4584 6.43554C19.3921 6.41766 19.2931 6.47157 19.0723 6.55995C18.3911 6.83249 17.8517 7.24291 17.2321 7.96018C16.9173 8.3246 16.9056 8.33318 16.7244 8.33318C16.4196 8.33318 16.1754 8.24812 16.2081 8.20232C16.219 8.17799 16.3517 8.08167 16.3611 8.07022C16.3705 8.05876 16.5164 7.94157 16.6855 7.80981C17.3399 7.29971 17.6453 7.01819 17.9353 6.65793C18.0885 6.46769 18.2022 6.35003 18.1372 6.28493C18.1073 6.25505 18.0564 6.25352 17.9933 6.25876C17.8676 6.26919 17.3079 6.57498 16.9423 6.82346C16.5122 7.11585 16.1636 7.4501 15.8569 7.86427C15.7947 7.94828 15.7195 8.03784 15.6898 8.06328C15.5921 8.14698 15.4781 8.15109 15.106 8.08433C14.9511 8.05653 14.6924 8.01254 14.6779 7.98636C14.6635 7.96019 14.8617 7.86244 15.0371 7.74745C15.6027 7.37659 16.0692 6.9359 16.4926 6.37245C16.6487 6.16476 16.7784 5.93733 16.7901 5.85957C16.8127 5.7085 16.6484 5.72723 16.4762 5.79823C16.3248 5.86069 15.992 6.07168 15.698 6.29167C15.2061 6.65984 14.8192 7.07001 14.4688 7.59488C14.3032 7.84303 14.266 7.87911 14.1544 7.90018C14.0081 7.9278 13.8279 7.88166 13.8082 7.86203C13.8157 7.80592 13.9311 7.69915 14.2011 7.34248C14.6984 6.68563 15.1229 5.85707 15.1291 5.59127C15.133 5.42791 15.0069 5.45117 14.8584 5.51863C14.7259 5.57882 14.4562 5.79691 14.2778 5.98807C14.0681 6.21286 13.6029 7.03613 13.45 7.45314C13.3178 7.86203 13.2849 7.82413 13.0436 7.83334C12.8846 7.83942 12.5406 7.818 12.4357 7.79552C12.1865 7.75733 12.0623 7.75078 12.3206 7.58661C12.3368 7.56258 12.4942 7.42906 12.6704 7.28989C13.1226 6.93283 13.3513 6.73457 13.5643 6.51494C13.6661 6.41003 13.8236 6.25056 13.9143 6.16058C14.1013 5.97508 14.1579 5.9049 14.2201 5.78122C14.3344 5.5541 14.3742 5.38288 14.2398 5.3426C14.1257 5.30839 14.007 5.38202 13.3679 5.87655C12.8418 6.28361 12.7022 6.38366 12.6239 6.4095C12.5724 6.42652 12.5396 6.41122 12.5396 6.37015C12.5396 6.32661 12.6318 6.16615 12.7614 5.9839C13.2761 5.2604 13.4862 4.91774 13.4355 4.78636C13.3978 4.68873 13.2415 4.71897 13.0693 4.80462C12.7058 4.98544 12.2575 5.32713 11.9722 5.64072C11.5347 6.12166 11.2369 6.62619 11.0161 7.25997C10.8525 7.63299 10.8133 7.75078 10.7414 7.79005C10.591 7.80421 10.6237 7.71806 10.6171 7.65262C10.6098 7.57886 10.5892 7.55017 10.5717 7.47096C10.474 7.02888 10.3332 6.68362 10.0962 6.30455C9.72849 5.7165 9.30765 5.27288 8.73283 4.86739C8.48752 4.69435 8.35938 4.58479 8.28265 4.61622ZM11.8203 7.19454C11.8717 7.24593 11.7691 7.38022 11.6665 7.5037C11.5392 7.65676 11.3138 7.82032 11.2514 7.76387C11.1957 7.71343 11.3231 7.50604 11.4494 7.36541C11.5677 7.23363 11.7607 7.13488 11.8203 7.19454ZM20.3082 7.65917C20.3082 7.65917 20.1447 7.91895 20.1447 7.92747C20.1447 7.93598 20.0939 8.0006 20.0727 8.09107C20.0516 8.18153 20.0496 8.31244 20.0353 8.39106C20.0047 8.5586 20.0139 8.6015 19.9223 8.69478C19.8698 8.7221 19.8061 8.70098 19.7066 8.69412C19.565 8.68437 19.152 8.62774 19.079 8.6081C19.0243 8.59335 18.7388 8.58998 18.7388 8.56223C18.7388 8.52287 19.0737 8.3914 19.2554 8.29248C19.3632 8.23373 19.5604 8.12857 19.6935 8.04526C19.8972 7.91772 19.9125 7.90205 20.0531 7.80968C20.1484 7.74706 20.3082 7.65917 20.3082 7.65917ZM22.1457 8.45099C22.2223 8.52771 22.2895 8.54915 21.8966 8.75964C21.7662 8.82331 21.5441 8.91561 21.5114 8.89598C21.4656 8.85671 21.6189 8.68302 21.7242 8.58704C21.8677 8.45621 22.0751 8.38034 22.1457 8.45099Z" fill="black"/></svg>`;
 /* 红心：方底(自写) + 用户导出心形path。Fav=红底白心，Unfav=白底红线框心 */
 var HEART_FAV = `<svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg"><rect width="84" height="84" rx="3" fill="#FF0000"/><g transform="translate(9.5 12)"><path fill-rule="evenodd" clip-rule="evenodd" d="M22.75 0H9.75L0 12.6316V34.7368L29.25 60H35.75L65 34.7368V12.6316L55.25 0H42.25L32.5 9.47368L22.75 0Z" fill="#fff"/></g></svg>`;
 var HEART_UNFAV = `<svg viewBox="0 0 84 84" xmlns="http://www.w3.org/2000/svg"><rect width="84" height="84" rx="3" fill="#fff"/><g transform="translate(9.5 12)"><path d="M21.7354 2.5L30.7578 11.2666L32.5 12.96L34.2422 11.2666L43.2646 2.5H54.0215L62.5 13.4844V33.5928L34.8203 57.5H30.1797L2.5 33.5928V13.4844L10.9785 2.5H21.7354Z" fill="none" stroke="#FF0000" stroke-width="5"/></g></svg>`;
-document.getElementById('logoWrap').innerHTML = LOGO_SVG;
+document.getElementById('logoWrap').innerHTML = '<img src="assets/logo2.svg" alt="WMS">';
 
 /* 左栏 section icon（替换 emoji），用 currentColor 跟随文字色 */
 var ICO_AWARD = `<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M90 10H30V70L40 80H80L90 70V10Z" fill="currentColor"/><path d="M100 20H85V60L100 45V20Z" fill="currentColor"/><path d="M20 20H35V60L20 45V20Z" fill="currentColor"/><rect x="55" y="75" width="10" height="25" fill="currentColor"/><rect x="85" y="100" width="10" height="50" transform="rotate(90 85 100)" fill="currentColor"/></svg>`;
@@ -302,11 +334,12 @@ var state={
   open:{list:true, award:true},      // 展开状态(可多开,独立于mode)；红心无展开
   awards:['cannes'],                  // 奖项默认选戛纳(进奖项时生效)
   yearRange:[2020,2025],              // 默认最近5年
-  list:'cc',
+  list:'a24',
   sort:'new',
   favs:{},                            // 收藏：title_cn -> true
   pendingRemove:{},                   // 红心模式下刚取消、暂留到下次进入前
   awardTouched:false,                 // 奖项是否被点过(初始未处理)
+  cahiersYear:2025,                  // 电影手册选中年份
   empty:null                          // 当前空状态榜单key(无数据项)
 };
 
@@ -351,6 +384,24 @@ function a24Arr(){
       awardKeys:CN2AWARDS[d.title_cn]||[]};
   });
 }
+function yearSelectorHTML(){
+  var years=[2025,2024,2023,2022,2021,2020];
+  var opts=years.map(function(y){
+    return '<option value="'+y+'"'+(y===state.cahiersYear?' selected':'')+'>'+y+'</option>';
+  }).join('');
+  return '<select id="cahiersYearSel" class="year-sel" onclick="event.stopPropagation()">'+opts+'</select>';
+}
+function cahiersArr(){
+  return CAHIERS_DATA
+    .filter(function(d){ return d.year===state.cahiersYear; })
+    .map(function(d){
+      return {
+        title:d.title_cn, year:d.year, poster:d.poster,
+        dir:d.director, rank:d.rank, is_new:(d.rank<=3),
+        awardKeys:CN2AWARDS[d.title_cn]||[]
+      };
+    });
+}
 function favArr(){
   // 跨池：奖项库 + CC库 中所有被收藏的；外加本次"刚取消但暂留"的
   var out=[],seen={};
@@ -383,31 +434,30 @@ function render(){
     var nm=EMPTY_NAME[state.empty]||'该榜单';
     document.getElementById('wallTitle').innerHTML='<span class="front">'+nm+'</span>';
     document.getElementById('wallSub').textContent='数据整理中';
-    document.querySelector('.sort-row').style.visibility='hidden';
     grid.innerHTML='<div class="empty-stage">'+
       '<div class="empty-card"><div class="empty-ph"></div></div>'+
       '<div class="empty-text">该榜单数据整理中，敬请期待</div></div>';
     return;
   }
-  document.querySelector('.sort-row').style.visibility='';
 
   var isA24=(state.mode==='list' && state.list==='a24');
   var isCC=(state.mode==='list' && state.list==='cc');
-  var isRanked=isA24||isCC;
+  var isCahiers=(state.mode==='list' && state.list==='cahiers');
+  var isRanked=isA24||isCC||isCahiers;
   var arr;
   if(state.mode==='award')arr=awardArr();
-  else if(state.mode==='list')arr=(state.list==='a24'?a24Arr():listArr());
+  else if(state.mode==='list'){
+    arr = state.list==='a24' ? a24Arr()
+        : state.list==='cahiers' ? cahiersArr()
+        : listArr();
+  }
   else arr=favArr();
 
   // 带排名榜单(A24/CC)按排名排序；其余按年份
   if(isRanked){
     arr.sort(function(a,b){return state.sort==='new'?a.rank-b.rank:b.rank-a.rank;});
-    document.getElementById('sNew').textContent='从高到低';
-    document.getElementById('sOld').textContent='从低到高';
   }else{
     arr.sort(function(a,b){return state.sort==='new'?b.year-a.year:a.year-b.year;});
-    document.getElementById('sNew').textContent='最新';
-    document.getElementById('sOld').textContent='最早';
   }
 
   // 海报框比例：CC榜单4:5 / A24和奖项2:3 / 红心2:3
@@ -419,25 +469,34 @@ function render(){
   var ws=document.getElementById('wallSub');
   if(state.mode==='award'){
     var names=state.awards.map(function(k){return AW[k];}).join(' + ');
-    var suffix=(state.awards.length===1?'获奖电影':'最佳影片');  // 交集→最佳影片
-    wt.innerHTML='<span class="front">'+names+'</span> <span class="back">'+suffix+'</span>';
-    ws.textContent=arr.length+'部 · '+state.yearRange[0]+'–'+state.yearRange[1];
+    var suffix=(state.awards.length===1?'获奖电影':'最佳影片');
+    wt.innerHTML='<span class="title-cat">'+names+'</span>'+
+      '<span class="title-detail"><span>'+suffix+'</span><span><span class="num">'+arr.length+'</span>部</span></span>';
+    ws.textContent=state.yearRange[0]+'–'+state.yearRange[1];
   }else if(isA24){
-    wt.innerHTML='<span class="front">A24</span> <span class="back">年度票房榜</span>';
-    ws.innerHTML='10部 · 全球票房 · <span style="color:var(--title-front)">新王登基</span>';
+    wt.innerHTML='<span class="title-cat">A24</span>'+
+      '<span class="title-detail"><span>总票房榜</span><span><span class="num">10</span>部</span></span>';
+    ws.textContent='';
+  }else if(isCahiers){
+    wt.innerHTML='<span class="title-cat">电影手册</span>'+
+      '<span class="title-detail"><span>年度十佳</span><span>'+yearSelectorHTML()+'</span></span>';
+    ws.textContent=arr.length+'部 · '+state.cahiersYear+'年';
   }else if(state.mode==='list'){
-    wt.innerHTML='<span class="front">CC 标准收藏</span> <span class="back">年度畅销榜</span>';
-    ws.textContent=arr.length+'部 · 今年';
+    wt.innerHTML='<span class="title-cat">CC</span>'+
+      '<span class="title-detail"><span>标准收藏畅销榜</span><span><span class="num">'+arr.length+'</span>部</span></span>';
+    ws.textContent='';
   }else{
-    wt.innerHTML='<span class="front">我的红心</span> <span class="back">收藏夹</span>';
-    ws.textContent=arr.length+'部';
+    wt.innerHTML='<span class="title-cat">红心</span>'+
+      '<span class="title-detail"><span>收藏夹</span><span><span class="num">'+arr.length+'</span>部</span></span>';
+    ws.textContent='';
   }
 
   // 获奖角标显示规则：
-  // - CC/A24/红心：显示(标注这片得过哪些奖)
+  // - 排名榜单(CC/A24/电影手册)：用横幅图标显示该片得过哪些奖
   // - 奖项单选：不显示(全是同一个奖，重复废话)
-  // - 奖项多选(交集)：显示(让观众分清每部到底得了哪几个奖)
-  var showTags = (state.mode!=='award') || (state.awards.length>1);
+  // - 奖项多选(交集)：底部文字角标显示(让观众分清每部到底得了哪几个奖)
+  // - 红心：不显示
+  var showTags = (state.mode==='award' && state.awards.length>1);
   document.getElementById('favCount').textContent='('+Object.keys(state.favs).length+')';
 
   // 网格
@@ -447,12 +506,25 @@ function render(){
     var heart='<div class="heart '+(faved?'faved':'')+'" data-title="'+encodeURIComponent(f.title)+'">'+(faved?HEART_FAV:HEART_UNFAV)+'</div>';
     var tags=(showTags&&f.awardKeys&&f.awardKeys.length)?
       '<div class="card-tags">'+f.awardKeys.map(function(k){return '<span class="mini-tag '+k+'">'+AWNAME[k]+'</span>';}).join('')+'</div>':'';
-    // 排名标(A24/CC共用，前三橙色)；A24额外带票房
-    var rankBadge=isRanked?'<div class="rank-badge'+((isA24&&f.rank<=3)?' is-new':'')+'">'+f.rank+'</div>':'';
-    var headBox=isA24?'<span class="a24-box">'+f.box+'</span>':'';
-    var rankHead=isRanked?'<div class="a24-head">'+rankBadge+headBox+'</div>':'';
-    return '<div class="card">'+rankHead+'<div class="poster">'+p+heart+'</div>'+
-      '<div class="card-title">'+f.title+(f.year?'<span class="yr">'+f.year+'</span>':'')+'</div>'+
+    // C版排名标横幅：NO.x色块(前3橙) + 票房 + 奖项图标(按实际获奖)
+    var isTop3=(isA24||isCahiers)&&f.rank<=3;
+    var awIcons='';
+    if(f.awardKeys&&f.awardKeys.length){
+      if(f.awardKeys.indexOf('oscar')>=0)awIcons+=ICO_OSCAR;
+      if(f.awardKeys.indexOf('cannes')>=0)awIcons+=ICO_CANNES;
+    }
+    var revText=isA24?f.box:'';
+    var rankHead=isRanked
+      ?'<div class="rank-banner">'+
+         '<div class="rank-no'+(isTop3?' is-new':'')+'">NO.'+f.rank+'</div>'+
+         '<div class="rank-bar"><span class="rank-rev">'+revText+'</span>'+
+           '<span class="rank-icons">'+awIcons+'</span></div>'+
+       '</div>'
+      :'';
+    return '<div class="card"><div class="poster-wrap">'+rankHead+
+      '<div class="poster">'+p+'</div></div>'+
+      '<div class="card-title"><span class="t-name">'+f.title+'</span>'+
+        (f.year?'<span class="yr">'+f.year+'</span>':'')+heart+'</div>'+
       '<div class="card-dir">'+f.dir+'</div>'+tags+'</div>';
   }).join('');
 }
@@ -540,12 +612,17 @@ document.querySelectorAll('#listSec .tag[data-list]').forEach(function(t){
     e.stopPropagation();
     if(t.dataset.empty){ showEmpty(t.dataset.list); return; }
     state.list=t.dataset.list;
+    if(t.dataset.list==='cahiers' && !state.cahiersYear) state.cahiersYear=2025;
     selectContent('list');
   });
 });
 /* ---- 排序 ---- */
-document.getElementById('sNew').onclick=function(){state.sort='new';this.classList.add('on');document.getElementById('sOld').classList.remove('on');render();};
-document.getElementById('sOld').onclick=function(){state.sort='old';this.classList.add('on');document.getElementById('sNew').classList.remove('on');render();};
+document.addEventListener('change',function(e){
+  if(e.target && e.target.id==='cahiersYearSel'){
+    state.cahiersYear=parseInt(e.target.value,10);
+    selectContent('list');
+  }
+});
 
 /* ---- 红心点击(事件委托) ---- */
 grid.addEventListener('click',function(e){

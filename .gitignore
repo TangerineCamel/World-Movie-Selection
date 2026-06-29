@@ -8,3 +8,6 @@ secrets.*
 *.bak2
 *.bak*
 stills/
+cahiers_posters/
+posters_local/
+usage.js
