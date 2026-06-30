@@ -11,3 +11,5 @@ stills/
 cahiers_posters/
 posters_local/
 usage.js
+node_modules/
+package-lock.json

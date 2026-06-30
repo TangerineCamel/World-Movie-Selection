@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMS · 三大节地理分布</title>
+<style>
+  :root{
+    --bg:#0e0f13;
+    --ink:#e8e6df;
+    --muted:#8b8a84;
+    --line:#23252c;
+    --panel:#15171c;
+    --bear:#d64545;   /* 柏林金熊 红 */
+    --lion:#3ea66f;   /* 威尼斯金狮 绿 */
+    --cannes:#e0a83e; /* 戛纳金棕榈 金 */
+    --empty:#3a3d46;  /* 未获奖点位 */
+    --land:#1c1e25;
+    --land-stroke:#2a2d36;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif;
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  header{
+    padding:14px 22px 10px;border-bottom:1px solid var(--line);
+    display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;
+  }
+  header h1{font-size:15px;font-weight:600;letter-spacing:.06em;margin:0}
+  header .sub{font-size:12px;color:var(--muted)}
+  .legend{display:flex;gap:16px;margin-left:auto;font-size:12px;color:var(--muted)}
+  .legend .item{display:flex;align-items:center;gap:6px}
+  .legend .dot{width:10px;height:10px;border-radius:50%}
+  main{flex:1;display:flex;min-height:0;position:relative}
+  #mapWrap{flex:1;position:relative;min-width:0}
+  svg{width:100%;height:100%;display:block;cursor:grab}
+  svg:active{cursor:grabbing}
+  .country{fill:var(--land);stroke:var(--land-stroke);stroke-width:.4px}
+  .country.has:hover{fill:#262932;cursor:pointer}
+  .award-dot{cursor:pointer;transition:opacity .15s}
+  /* side panel — push/squeeze: occupies its own column, map re-fits to remaining space */
+  #panel{
+    width:300px;flex:none;border-left:1px solid var(--line);background:var(--panel);
+    display:flex;flex-direction:column;min-height:0;
+  }
+  #panel.hidden{display:none}
+  #panel .phead{padding:14px 16px;border-bottom:1px solid var(--line)}
+  #panel .phead .cname{font-size:16px;font-weight:600}
+  #panel .phead .ctally{font-size:12px;color:var(--muted);margin-top:4px;display:flex;gap:12px}
+  #panel .ctally b{color:var(--ink)}
+  #panel .plist{overflow-y:auto;padding:8px}
+  .film{display:flex;gap:10px;padding:8px;border-radius:8px}
+  .film:hover{background:#1b1e25}
+  .film .poster{width:42px;height:62px;border-radius:4px;background:#222 center/cover no-repeat;flex:none;border:1px solid var(--line)}
+  .film .meta{font-size:12px;min-width:0}
+  .film .meta .t{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .film .meta .o{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .film .tag{font-size:10px;padding:1px 6px;border-radius:99px;margin-top:3px;display:inline-block}
+  .closeP{margin-left:auto;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;background:none;border:none}
+  /* time controls */
+  footer{
+    border-top:1px solid var(--line);padding:12px 22px 16px;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  }
+  .yearLabel{font-size:13px;min-width:130px;font-variant-numeric:tabular-nums}
+  .yearLabel b{font-size:15px}
+  .slider{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px}
+  .slider .tracks{position:relative;height:26px}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;width:100%;height:3px;background:var(--line);
+    border-radius:2px;position:absolute;top:11px;margin:0;pointer-events:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:15px;height:15px;border-radius:50%;
+    background:var(--ink);cursor:pointer;pointer-events:auto;border:2px solid var(--bg);
+  }
+  .modeBtns{display:flex;gap:6px}
+  .modeBtns button{
+    font-size:12px;padding:5px 11px;border-radius:7px;cursor:pointer;
+    background:var(--panel);color:var(--muted);border:1px solid var(--line);
+  }
+  .modeBtns button.on{color:var(--ink);border-color:var(--ink)}
+  .hint{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>世界电影大赏 · 三大节地理分布</h1>
+  <span class="sub">点 = 获奖 · 大小 = 该时段获奖次数</span>
+  <div class="legend">
+    <div class="item"><span class="dot" style="background:var(--bear)"></span>柏林金熊</div>
+    <div class="item"><span class="dot" style="background:var(--lion)"></span>威尼斯金狮</div>
+    <div class="item"><span class="dot" style="background:var(--cannes)"></span>戛纳金棕榈</div>
+  </div>
+</header>
+
+<main>
+  <div id="mapWrap"><svg id="map"></svg></div>
+  <aside id="panel" class="hidden">
+    <div class="phead">
+      <div style="display:flex;align-items:center">
+        <span class="cname" id="pCName"></span>
+        <button class="closeP" id="pClose">×</button>
+      </div>
+      <div class="ctally" id="pTally"></div>
+    </div>
+    <div class="plist" id="pList"></div>
+  </aside>
+</main>
+
+<footer>
+  <div class="yearLabel" id="yearLabel"></div>
+  <div class="slider">
+    <div class="tracks">
+      <input type="range" id="rngLo" min="1946" max="2024" value="1946">
+      <input type="range" id="rngHi" min="1946" max="2024" value="2024">
+    </div>
+    <div class="hint" id="rangeHint">拖两端选区间 · 双端重合=看单一年份</div>
+  </div>
+  <div class="modeBtns" id="awardFilter">
+    <button data-a="all" class="on">三奖合计</button>
+    <button data-a="bear">柏林</button>
+    <button data-a="lion">威尼斯</button>
+    <button data-a="cannes">戛纳</button>
+  </div>
+</footer>
+
+<!-- libs -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+<!-- your data -->
+<script src="data/golden_bear.js"></script>
+<script src="data/lion_metadata.js"></script>
+<script src="data/cannes_metadata.js"></script>
+
+<script>
+/* ============================================================
+   CONFIG — 改这里就能切换取国家逻辑 / 海报地址
+============================================================ */
+const OSS_BASE = "https://world-movie-selection.oss-cn-shanghai.aliyuncs.com/posters";
+const POSTER_PATH = { bear:"golden-bear", lion:"golden-lion", cannes:"cannes" };
+// 取国家：原型用 mainCountry。将来切合拍：改成读 productionCountries 返回数组即可。
+function countriesOf(film){ return film.mainCountry ? [film.mainCountry] : []; }
+
+const AWARDS = [
+  { key:"bear",   label:"柏林金熊",   color:"#d64545", data: typeof GOLDEN_BEAR_DATA!=="undefined" ? GOLDEN_BEAR_DATA : [] },
+  { key:"lion",   label:"威尼斯金狮", color:"#3ea66f", data: typeof GOLDEN_LION_DATA!=="undefined" ? GOLDEN_LION_DATA : [] },
+  { key:"cannes", label:"戛纳金棕榈", color:"#e0a83e", data: typeof CANNES_DATA!=="undefined" ? CANNES_DATA : [] },
+];
+
+/* iso3 -> ISO numeric (matches world-atlas TopoJSON `id`) */
+const ISO3_NUM = {"AFG": 4, "ALB": 8, "DZA": 12, "AND": 20, "AGO": 24, "ARG": 32, "ARM": 51, "AUS": 36, "AUT": 40, "AZE": 31, "BHS": 44, "BHR": 48, "BGD": 50, "BLR": 112, "BEL": 56, "BLZ": 84, "BEN": 204, "BTN": 64, "BOL": 68, "BIH": 70, "BWA": 72, "BRA": 76, "BRN": 96, "BGR": 100, "BFA": 854, "BDI": 108, "KHM": 116, "CMR": 120, "CAN": 124, "CPV": 132, "CAF": 140, "TCD": 148, "CHL": 152, "CHN": 156, "COL": 170, "COM": 174, "COG": 178, "COD": 180, "CRI": 188, "CIV": 384, "HRV": 191, "CUB": 192, "CYP": 196, "CZE": 203, "DNK": 208, "DJI": 262, "DOM": 214, "ECU": 218, "EGY": 818, "SLV": 222, "GNQ": 226, "ERI": 232, "EST": 233, "ETH": 231, "FJI": 242, "FIN": 246, "FRA": 250, "GAB": 266, "GMB": 270, "GEO": 268, "DEU": 276, "GHA": 288, "GRC": 300, "GTM": 320, "GIN": 324, "GNB": 624, "GUY": 328, "HTI": 332, "HND": 340, "HKG": 344, "HUN": 348, "ISL": 352, "IND": 356, "IDN": 360, "IRN": 364, "IRQ": 368, "IRL": 372, "ISR": 376, "ITA": 380, "JAM": 388, "JPN": 392, "JOR": 400, "KAZ": 398, "KEN": 404, "PRK": 408, "KOR": 410, "KWT": 414, "KGZ": 417, "LAO": 418, "LVA": 428, "LBN": 422, "LBR": 430, "LBY": 434, "LIE": 438, "LTU": 440, "LUX": 442, "MAC": 446, "MKD": 807, "MDG": 450, "MWI": 454, "MYS": 458, "MLI": 466, "MLT": 470, "MRT": 478, "MUS": 480, "MEX": 484, "MDA": 498, "MCO": 492, "MNG": 496, "MNE": 499, "MAR": 504, "MOZ": 508, "MMR": 104, "NAM": 516, "NPL": 524, "NLD": 528, "NZL": 554, "NIC": 558, "NER": 562, "NGA": 566, "NOR": 578, "OMN": 512, "PAK": 586, "PSE": 275, "PAN": 591, "PNG": 598, "PRY": 600, "PER": 604, "PHL": 608, "POL": 616, "PRT": 620, "QAT": 634, "ROU": 642, "RUS": 643, "RWA": 646, "SAU": 682, "SEN": 686, "SRB": 688, "SLE": 694, "SGP": 702, "SVK": 703, "SVN": 705, "SOM": 706, "ZAF": 710, "SSD": 728, "ESP": 724, "LKA": 144, "SDN": 729, "SUR": 740, "SWE": 752, "CHE": 756, "SYR": 760, "TWN": 158, "TJK": 762, "TZA": 834, "THA": 764, "TGO": 768, "TTO": 780, "TUN": 788, "TUR": 792, "TKM": 795, "UGA": 800, "UKR": 804, "ARE": 784, "GBR": 826, "USA": 840, "URY": 858, "UZB": 860, "VEN": 862, "VNM": 704, "YEM": 887, "ZMB": 894, "ZWE": 716, "XKX": 983};
+
+/* ============================================================
+   STATE
+============================================================ */
+let yearLo = 1946, yearHi = 2024, awardMode = "all";
+let geoCountries = [], centroidByNum = {}, pathGen, projection;
+const numToName = {};
+
+/* normalize every record into {award, key, color, year, iso3, num, film} */
+const RECORDS = [];
+AWARDS.forEach(a=>{
+  a.data.forEach(film=>{
+    const yr = +film.year;
+    if(!yr) return;
+    countriesOf(film).forEach(c=>{
+      const num = ISO3_NUM[c.iso3];
+      if(num==null) { console.warn("无 numeric 映射:", c.iso3, c.name); return; }
+      RECORDS.push({ aKey:a.key, color:a.color, year:yr, iso3:c.iso3, num, film });
+    });
+  });
+});
+// year bounds from data
+(()=>{
+  const ys = RECORDS.map(r=>r.year);
+  const lo = Math.min(...ys), hi = Math.max(...ys);
+  yearLo = lo; yearHi = hi;
+  ["rngLo","rngHi"].forEach(id=>{ const e=document.getElementById(id); e.min=lo; e.max=hi; });
+  document.getElementById("rngLo").value = lo;
+  document.getElementById("rngHi").value = hi;
+})();
+
+/* ============================================================
+   MAP
+============================================================ */
+const svg = d3.select("#map");
+let W=0,H=0;
+function size(){ const w=document.getElementById("mapWrap"); W=w.clientWidth; H=w.clientHeight; }
+
+/* 主体经纬度锚点：用本土视觉中心，避开海外飞地把质心拉偏。
+   key = ISO numeric。未列出的国家 fallback 到 geoPath.centroid。*/
+const ANCHOR_LONLAT = {
+  250:[2.5,47],    // 法国 France（避开海外省）
+  840:[-98,39],    // 美国 USA（本土，避开阿拉斯加/夏威夷）
+  826:[-1.5,52.5], // 英国 UK
+  620:[-8,39.5],   // 葡萄牙（避开亚速尔/马德拉）
+  724:[-3.7,40],   // 西班牙（避开加那利）
+  528:[5.3,52.2],  // 荷兰
+  578:[9,61],      // 挪威
+  208:[10,56],     // 丹麦
+  643:[38,56],     // 俄罗斯（欧俄部分视觉中心）
+  392:[138,37],    // 日本
+  156:[104,35.5],  // 中国
+  152:[-71,-35],   // 智利
+  554:[174,-41],   // 新西兰
+  36:[134,-25],    // 澳大利亚
+};
+
+let gZoom, zoom, curK = 1;  // current zoom scale, for counter-scaling dots
+
+function computeCentroids(feats){
+  feats.forEach(f=>{
+    const num = +f.id;
+    if(ANCHOR_LONLAT[num]){
+      centroidByNum[num] = projection(ANCHOR_LONLAT[num]); // 投影锚点经纬度 -> 像素
+    }else{
+      centroidByNum[num] = pathGen.centroid(f);
+    }
+    numToName[num] = f.properties.name;
+  });
+}
+
+d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(topo=>{
+  let feats = topojson.feature(topo, topo.objects.countries).features;
+  feats = feats.filter(f=> +f.id !== 10);   // 去掉南极洲 (numeric 010)
+  geoCountries = feats;
+  size();
+  // single <g> holds both land and dots, so zoom transforms everything together
+  gZoom = svg.append("g").attr("class","zoom-layer");
+  projection = d3.geoNaturalEarth1().fitSize([W,H], {type:"FeatureCollection",features:feats});
+  pathGen = d3.geoPath(projection);
+  computeCentroids(feats);
+
+  zoom = d3.zoom().scaleExtent([1, 8])
+    .translateExtent([[0,0],[W,H]])
+    .on("zoom",(e)=>{
+      curK = e.transform.k;
+      gZoom.attr("transform", e.transform);
+      // counter-scale dots & strokes so they stay crisp, not ballooned
+      gZoom.selectAll("circle.award-dot").attr("r", d=> d._r / curK);
+      gZoom.selectAll("path.country").attr("stroke-width", 0.4 / curK);
+      gZoom.selectAll("circle.award-dot").attr("stroke-width", 0.6 / curK);
+    });
+  svg.call(zoom).on("dblclick.zoom", null);
+
+  draw();
+  render();
+  window.addEventListener("resize", relayout);
+});
+
+// 重新布局：尺寸变化 / 侧栏开关时重算投影与质心
+function relayout(){
+  if(!projection) return;
+  size();
+  projection.fitSize([W,H],{type:"FeatureCollection",features:geoCountries});
+  computeCentroids(geoCountries);
+  if(zoom){ zoom.translateExtent([[0,0],[W,H]]); svg.call(zoom.transform, d3.zoomIdentity); curK=1; }
+  draw(); render();
+}
+
+function draw(){
+  gZoom.selectAll("path.country").data(geoCountries).join("path")
+    .attr("class","country").attr("d",pathGen)
+    .attr("stroke-width", 0.4 / curK);
+}
+
+/* aggregate within [yearLo,yearHi] respecting awardMode -> per country per award counts */
+function aggregate(){
+  const m = {}; // num -> {bear,lion,cannes}
+  RECORDS.forEach(r=>{
+    if(r.year<yearLo || r.year>yearHi) return;
+    if(awardMode!=="all" && r.aKey!==awardMode) return;
+    (m[r.num] ||= {bear:0,lion:0,cannes:0})[r.aKey]++;
+  });
+  return m;
+}
+
+const rScale = d3.scaleSqrt().range([2.4, 9]);
+function render(){
+  const agg = aggregate();
+  const maxC = d3.max(Object.values(agg).flatMap(o=>[o.bear,o.lion,o.cannes])) || 1;
+  rScale.domain([0,maxC]);
+
+  // build dot rows: each country -> up to 3 dots in fixed order
+  const order = [["bear","#d64545"],["lion","#3ea66f"],["cannes","#e0a83e"]];
+  const dots = [];
+  Object.keys(agg).forEach(num=>{
+    const c = centroidByNum[num]; if(!c||isNaN(c[0])) return;
+    const counts = agg[num];
+    const active = (awardMode==="all") ? order : order.filter(o=>o[0]===awardMode);
+    const span = (active.length-1);
+    active.forEach((o,i)=>{
+      const n = counts[o[0]];
+      const baseR = n>0 ? rScale(n) : 1.8;
+      dots.push({
+        num:+num, aKey:o[0], color:o[1],
+        x:c[0] + (i - span/2)*9,  // spread points horizontally around centroid
+        y:c[1],
+        _r: baseR,                // base radius (before zoom counter-scale)
+        on: n>0
+      });
+    });
+  });
+
+  const sel = gZoom.selectAll("circle.award-dot").data(dots, d=>d.num+"-"+d.aKey);
+  sel.join(
+    enter=>enter.append("circle").attr("class","award-dot")
+      .attr("cx",d=>d.x).attr("cy",d=>d.y).attr("r",d=>d._r/curK)
+      .attr("fill",d=>d.on?d.color:"var(--empty)")
+      .attr("opacity",d=>d.on?0.92:0.45)
+      .on("click",(e,d)=>openPanel(d.num, d.aKey)),
+    update=>update.attr("cx",d=>d.x).attr("cy",d=>d.y)
+      .attr("fill",d=>d.on?d.color:"var(--empty)")
+      .attr("opacity",d=>d.on?0.92:0.45)
+      .transition().duration(180).attr("r",d=>d._r/curK),
+    exit=>exit.remove()
+  );
+
+  // mark countries that have any award (for hover affordance)
+  const hasNum = new Set(Object.keys(agg).map(Number));
+  gZoom.selectAll("path.country").classed("has", d=>hasNum.has(+d.id))
+     .on("click",(e,d)=> hasNum.has(+d.id) && openPanel(+d.id, "all"));
+
+  updateYearLabel();
+}
+
+function updateYearLabel(){
+  const el = document.getElementById("yearLabel");
+  el.innerHTML = (yearLo===yearHi)
+    ? `<b>${yearLo}</b>`
+    : `<b>${yearLo}</b> – <b>${yearHi}</b>`;
+}
+
+/* ============================================================
+   PANEL (下钻)
+============================================================ */
+function openPanel(num, focusAward){
+  const films = RECORDS.filter(r=> r.num===num
+      && r.year>=yearLo && r.year<=yearHi
+      && (focusAward==="all" ? (awardMode==="all"||r.aKey===awardMode) : r.aKey===focusAward));
+  if(!films.length){ closePanel(); return; }
+  const panel = document.getElementById("panel");
+  const wasHidden = panel.classList.contains("hidden");
+  panel.classList.remove("hidden");
+  if(wasHidden) relayout();   // 侧栏首次展开 -> 地图 re-fit 到变窄后的空间
+  document.getElementById("pCName").textContent = films[0].film.mainCountry.name || numToName[num] || num;
+
+  const tally = {bear:0,lion:0,cannes:0};
+  RECORDS.filter(r=>r.num===num && r.year>=yearLo && r.year<=yearHi).forEach(r=>tally[r.aKey]++);
+  document.getElementById("pTally").innerHTML =
+    `<span>柏林 <b>${tally.bear}</b></span><span>威尼斯 <b>${tally.lion}</b></span><span>戛纳 <b>${tally.cannes}</b></span>`;
+
+  const labelMap = {bear:["柏林","#d64545"],lion:["威尼斯","#3ea66f"],cannes:["戛纳","#e0a83e"]};
+  const list = document.getElementById("pList");
+  list.innerHTML = "";
+  films.sort((a,b)=>b.year-a.year).forEach(r=>{
+    const f=r.film, lab=labelMap[r.aKey];
+    const div=document.createElement("div"); div.className="film";
+    const poster = f.tmdbId ? `${OSS_BASE}/${POSTER_PATH[r.aKey]}/${f.tmdbId}.jpg` : "";
+    div.innerHTML = `
+      <div class="poster" style="${poster?`background-image:url('${poster}')`:''}"></div>
+      <div class="meta">
+        <div class="t">${f.titleCN||f.titleOriginal||""}</div>
+        <div class="o">${f.titleOriginal||""} · ${r.year}</div>
+        <span class="tag" style="background:${lab[1]}22;color:${lab[1]}">${lab[0]}</span>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+function closePanel(){ document.getElementById("panel").classList.add("hidden"); relayout(); }
+document.getElementById("pClose").onclick = closePanel;
+
+/* ============================================================
+   CONTROLS
+============================================================ */
+const lo=document.getElementById("rngLo"), hi=document.getElementById("rngHi");
+function syncRange(changed){
+  let a=+lo.value, b=+hi.value;
+  if(a>b){ if(changed==="lo") b=a, hi.value=b; else a=b, lo.value=a; }
+  yearLo=a; yearHi=b; render();
+}
+lo.addEventListener("input",()=>syncRange("lo"));
+hi.addEventListener("input",()=>syncRange("hi"));
+
+document.querySelectorAll("#awardFilter button").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll("#awardFilter button").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    awardMode = btn.dataset.a;
+    render();
+  };
+});
+</script>
+</body>
+</html>
