@@ -96,9 +96,9 @@ body{background:var(--wall-bg);color:var(--ink);
 .tag{height:36px;border:1px solid var(--wall-bg);background:var(--wall-bg);color:var(--ink);
   font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:0 6px;line-height:1.2;white-space:nowrap;}
-.tag:hover:not(.on){background:var(--ink);color:var(--wall-bg);border-color:var(--ink);}
+.tag:hover:not(.on):not(.no-hover){background:var(--ink);color:var(--wall-bg);border-color:var(--ink);}
 .tag.on{background:var(--ink);color:var(--wall-bg);border-color:var(--ink);}
-.tag.on:hover{background:var(--wall-bg);color:var(--ink);border-color:var(--wall-bg);}  /* 激活态hover→未激活样式 */
+.tag.on:hover:not(.no-hover){background:var(--wall-bg);color:var(--ink);border-color:var(--wall-bg);}  /* 激活态hover→未激活样式 */
 
 /* 红心区提示 */
 .fav-hint{font-size:13px;color:var(--meta);line-height:1.6;}
@@ -259,7 +259,7 @@ body{background:var(--wall-bg);color:var(--ink);
         </div>
         <div class="acc-body">
           <div class="year-block" id="yearBlock">
-            <div class="year-val" id="yearVal">2020 – 2025</div>
+            <div class="year-val" id="yearVal">2010 – 2025</div>
             <div class="slider" id="slider">
               <div class="track-base"></div>
               <div class="track-fill" id="trackFill"></div>
@@ -372,7 +372,7 @@ var state={
   mode:'list',                        // 当前选中内容(全局唯一)：list/award/fav
   open:{list:true, award:true},      // 展开状态(可多开,独立于mode)；红心无展开
   awards:['cannes'],                  // 奖项默认选戛纳(进奖项时生效)
-  yearRange:[2020,2025],              // 默认最近5年
+  yearRange:[2010,2025],              // 默认2010-最新
   list:'a24',
   sort:'new',
   favs:{},                            // 收藏：title_cn -> true
@@ -702,6 +702,15 @@ document.querySelector('.acc-head[data-select="fav"]').addEventListener('click',
   selectContent('fav');
 });
 
+/* 点击后短暂屏蔽hover，鼠标移开后移除 */
+function suppressHover(el){
+  el.classList.add('no-hover');
+  el.addEventListener('mouseleave',function remove(){
+    el.classList.remove('no-hover');
+    el.removeEventListener('mouseleave',remove);
+  });
+}
+
 /* ---- 奖项 tag 点击：选中(多选)，跨模块互斥 ---- */
 document.querySelectorAll('#awardSec .tag[data-aw]').forEach(function(t){
   t.addEventListener('click',function(e){
@@ -713,13 +722,14 @@ document.querySelectorAll('#awardSec .tag[data-aw]').forEach(function(t){
       // 从别的模式/空状态切入奖项：本次点击的项成为唯一选中
       state.awards=[k];
       selectContent('award');
-      return;
+      suppressHover(t); return;
     }
     // 已在奖项模式：多选增删
     var i=state.awards.indexOf(k);
     if(i>=0){ if(state.awards.length>1)state.awards.splice(i,1); }
     else state.awards.push(k);
     selectContent('award');
+    suppressHover(t);
   });
 });
 /* ---- 榜单 tag 点击：单选，跨模块互斥 ---- */
@@ -731,6 +741,7 @@ document.querySelectorAll('#listSec .tag[data-list]').forEach(function(t){
     if(t.dataset.list==='cahiers' && !state.cahiersYear) state.cahiersYear=2025;
     if(t.dataset.list==='villain' && !state.villainScene) state.villainScene='cannes';
     selectContent('list');
+    suppressHover(t);
   });
 });
 /* ---- 年份选择器 ---- */
