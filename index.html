@@ -93,11 +93,11 @@ body{background:var(--wall-bg);color:var(--ink);
 
 /* tag 网格：两列，gap16 */
 .tag-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
-.tag{height:36px;border:1px solid var(--ink);background:transparent;color:var(--ink);
+.tag{height:36px;border:1px solid var(--wall-bg);background:var(--wall-bg);color:var(--ink);
   font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  text-align:center;padding:0 6px;transition:background .12s,color .12s;line-height:1.2;white-space:nowrap;}
-.tag:hover:not(.on){background:rgba(0,0,0,.05);}
-.tag.on{background:var(--ink);color:var(--panel-bg);}       /* 选中：黑底+背景色字 */
+  text-align:center;padding:0 6px;line-height:1.2;white-space:nowrap;}
+.tag:hover:not(.on){background:var(--ink);color:var(--wall-bg);border-color:var(--ink);}
+.tag.on{background:var(--ink);color:var(--wall-bg);border-color:var(--ink);}       /* 选中：黑底+米黄字，无边框感 */
 
 /* 红心区提示 */
 .fav-hint{font-size:13px;color:var(--meta);line-height:1.6;}
@@ -151,6 +151,14 @@ body{background:var(--wall-bg);color:var(--ink);
 
 /* 工具组距logo下线40 → 这里指海报网格距标题区。用padding-top实现 */
 .grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0 44px 80px;}
+/* 小红书话题榜：瀑布流占位（纯展示） */
+.xhs-wall{display:flex;gap:40px;padding:0 66px 80px;}
+.xhs-col{flex:1;display:flex;flex-direction:column;gap:24px;}
+.xhs-card{display:flex;flex-direction:column;gap:8px;}
+.xhs-card .xhs-img{position:relative;background:var(--meta);width:100%;}
+.xhs-card .xhs-img::before{content:'';display:block;padding-top:calc(var(--ratio) * 100%);}
+.xhs-card .xhs-t{background:var(--meta);height:17px;width:75%;}
+.xhs-card .xhs-d{background:var(--meta);height:17px;width:95%;}
 /* 海报墙左右无线，仅内部分割线。card 等高(stretch)使行底对齐 */
 .card{border-right:1px solid var(--grid-line);border-bottom:1px solid var(--grid-line);
   padding:21px 22px 24px;position:relative;display:flex;flex-direction:column;}
@@ -237,7 +245,7 @@ body{background:var(--wall-bg);color:var(--ink);
           <div class="sub-label">媒体</div>
           <div class="tag-grid">
             <button class="tag" data-list="villain">反派影评十年十佳</button>
-            <button class="tag" data-list="xhs" data-empty="1">小红书话题榜</button>
+            <button class="tag" data-list="xhs">小红书话题榜</button>
           </div>
         </div>
       </div>
@@ -420,6 +428,28 @@ function sceneSelectorHTML(){
     '<span class="yp-list">'+items+'</span>'+
   '</span>';
 }
+function xhsWallHTML(){
+  // 5列，每列统一比例；列间距40px
+  var cols=[
+    {ratio:1.25, count:4},   // 4:5
+    {ratio:1.50, count:3},   // 2:3
+    {ratio:1.00, count:4},   // 1:1
+    {ratio:1.33, count:3},   // 3:4
+    {ratio:1.50, count:4}    // 2:3
+  ];
+  var html=cols.map(function(c){
+    var cards='';
+    for(var i=0;i<c.count;i++){
+      cards+='<div class="xhs-card">'+
+        '<div class="xhs-img" style="--ratio:'+c.ratio+'"></div>'+
+        '<div class="xhs-t"></div>'+
+        '<div class="xhs-d"></div>'+
+      '</div>';
+    }
+    return '<div class="xhs-col">'+cards+'</div>';
+  }).join('');
+  return '<div class="xhs-wall">'+html+'</div>';
+}
 function cahiersArr(){
   return CAHIERS_DATA
     .filter(function(d){ return d.year===state.cahiersYear; })
@@ -484,6 +514,7 @@ function render(){
   var isCC=(state.mode==='list' && state.list==='cc');
   var isCahiers=(state.mode==='list' && state.list==='cahiers');
   var isVillain=(state.mode==='list' && state.list==='villain');
+  var isXHS=(state.mode==='list' && state.list==='xhs');
   var isRanked=isA24||isCC||isCahiers||isVillain;
   var arr;
   if(state.mode==='award')arr=awardArr();
@@ -504,7 +535,7 @@ function render(){
 
   // 海报框比例：CC榜单4:5 / A24和奖项2:3 / 红心2:3
   grid.classList.remove('ratio-cc','ratio-award','ratio-fav');
-  var use2_3=(isA24||isVillain||state.mode==='award');  // A24/反派影评/奖项 用2:3
+  var use2_3=(isA24||isVillain||isCahiers||state.mode==='award');  // A24/电影手册/反派影评/奖项 用2:3
   grid.classList.add(use2_3?'ratio-award':'ratio-cc');
 
   // 标题 + 副属性行
@@ -535,6 +566,10 @@ function render(){
     wt.innerHTML='<span class="title-cat">反派影评</span>'+
       '<span class="title-detail">十年十佳'+sceneSelectorHTML()+'</span>';
     ws.textContent='';
+  }else if(isXHS){
+    wt.innerHTML='<span class="title-cat" style="font-size:38px">小红书话题榜</span>'+
+      '<span class="title-detail"><span class="num">2025–2026</span></span>';
+    ws.textContent='';
   }else if(state.mode==='list'){
     wt.innerHTML='<span class="title-cat">CC</span>'+
       '<span class="title-detail"><span>标准收藏畅销榜</span><span><span class="num">'+arr.length+'</span>部</span></span>';
@@ -552,6 +587,13 @@ function render(){
   // - 红心：不显示
   var showTags = (state.mode==='award' && state.awards.length>1);
   document.getElementById('favCount').textContent='('+Object.keys(state.favs).length+')';
+
+  // 小红书话题榜：单独瀑布流占位
+  if(isXHS){
+    grid.className='';
+    grid.innerHTML=xhsWallHTML();
+    return;
+  }
 
   // 网格
   grid.innerHTML=arr.map(function(f){
